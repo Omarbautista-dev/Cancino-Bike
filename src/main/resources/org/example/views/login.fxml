@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0"
+            prefWidth="800.0"
+
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+
+            fx:controller="org.example.controllers.LoginController">
+
+    <children>
+
+        <Label layoutX="300"
+               layoutY="70"
+               text="Cancino Bike POS"
+               styleClass="titulo"/>
+
+        <TextField fx:id="txtUsuario"
+                   layoutX="250"
+                   layoutY="180"
+                   prefWidth="300"
+                   promptText="Usuario"/>
+
+        <PasswordField fx:id="txtPassword"
+                       layoutX="250"
+                       layoutY="250"
+                       prefWidth="300"
+                       promptText="Contraseña"/>
+
+        <Button layoutX="340"
+                layoutY="330"
+                text="Iniciar Sesión"
+                onAction="#iniciarSesion"
+                styleClass="btn-login"/>
+
+    </children>
+
+</AnchorPane>
