@@ -28,6 +28,20 @@ public class DetalleVentaItem {
 
     public void aumentarCantidad(int cantidadExtra) {
         this.cantidad += cantidadExtra;
+        recalcularSubtotal();
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+        recalcularSubtotal();
+    }
+
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
+        recalcularSubtotal();
+    }
+
+    private void recalcularSubtotal() {
         this.subtotal = this.cantidad * this.precioUnitario;
     }
 }

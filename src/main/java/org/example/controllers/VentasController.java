@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
+import javafx.scene.input.MouseButton;
 import org.example.models.DetalleVentaItem;
 import org.example.models.Producto;
 import org.example.models.VentaModel;
@@ -62,6 +62,8 @@ public class VentasController {
         configurarTablaCarrito();
         configurarBusqueda();
         configurarDescuento();
+        configurarDobleClickCarrito();
+        editarCantidadCarrito();
         buscarProductos("");
     }
 
@@ -76,6 +78,75 @@ public class VentasController {
         } catch (Exception e) {
             System.out.println("No se pudo cargar el logo");
         }
+    }
+
+    private void configurarDobleClickCarrito() {
+        tablaCarrito.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY
+                    && event.getClickCount() == 2) {
+
+                DetalleVentaItem item = tablaCarrito
+                        .getSelectionModel()
+                        .getSelectedItem();
+
+                if (item != null) {
+                    carrito.remove(item);
+                    calcularTotales();
+                }
+            }
+        });
+    }
+
+    private void editarCantidadCarrito() {
+        tablaCarrito.setEditable(true);
+
+        colCarCantidad.setCellFactory(column -> new TableCell<DetalleVentaItem, Integer>() {
+
+            private final TextField textField = new TextField();
+
+            {
+                textField.setOnAction(event -> guardarCambio());
+                textField.focusedProperty().addListener((obs, oldValue, newValue) -> {
+                    if (!newValue) {
+                        guardarCambio();
+                    }
+                });
+            }
+
+            private void guardarCambio() {
+                DetalleVentaItem item = getTableView().getItems().get(getIndex());
+
+                try {
+                    int nuevaCantidad = Integer.parseInt(textField.getText().trim());
+
+                    if (nuevaCantidad <= 0) {
+                        mostrarMensaje("La cantidad debe ser mayor a cero.");
+                        updateItem(item.getCantidad(), false);
+                        return;
+                    }
+
+                    item.setCantidad(nuevaCantidad);
+                    tablaCarrito.refresh();
+                    calcularTotales();
+
+                } catch (NumberFormatException e) {
+                    mostrarMensaje("La cantidad debe ser numérica.");
+                    updateItem(item.getCantidad(), false);
+                }
+            }
+
+            @Override
+            protected void updateItem(Integer cantidad, boolean empty) {
+                super.updateItem(cantidad, empty);
+
+                if (empty || cantidad == null) {
+                    setGraphic(null);
+                } else {
+                    textField.setText(String.valueOf(cantidad));
+                    setGraphic(textField);
+                }
+            }
+        });
     }
 
     private void configurarCombos() {
