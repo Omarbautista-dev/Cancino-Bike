@@ -86,6 +86,13 @@
                        styleClass="info-label"/>
             </HBox>
 
+            <HBox spacing="8" styleClass="search-bar">
+                <Label text="Buscar:" styleClass="form-label"/>
+                <TextField fx:id="txtBuscar"
+                           promptText="Código, modelo o nombre"
+                           prefWidth="350"/>
+            </HBox>
+
             <TableView fx:id="tablaInventario" VBox.vgrow="ALWAYS" styleClass="inventario-table">
                 <columns>
                     <TableColumn fx:id="colId" text="ID" prefWidth="55"/>

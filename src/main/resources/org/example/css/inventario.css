@@ -39,3 +39,10 @@
     -fx-background-radius: 3px;
     -fx-font-size: 12px;
 }
+
+.search-bar {
+    -fx-background-color: #eef3f7;
+    -fx-padding: 8px;
+    -fx-border-color: #999;
+    -fx-border-width: 0 0 1px 0;
+}
