@@ -1,48 +1,106 @@
 .root {
-
-    -fx-background-color: #0f1115;
-
+    -fx-background-color: #edf1f5;
+    -fx-font-family: "Arial";
 }
 
-.label {
+/* CARD */
+.login-card {
 
-    -fx-text-fill: white;
+    -fx-background-color: white;
 
+    -fx-background-radius: 22;
+
+    -fx-border-radius: 22;
+
+    -fx-border-color: #1e90ff;
+
+    -fx-border-width: 2;
 }
 
-.text-field,
-.password-field {
-
-    -fx-background-radius: 10;
-
-    -fx-padding: 10;
-
-    -fx-font-size: 14px;
-}
-
+/* TITULO */
 .titulo {
 
     -fx-font-size: 28px;
 
     -fx-font-weight: bold;
+
+    -fx-text-fill: black;
 }
 
+/* SUB */
+.subtitulo {
+
+    -fx-font-size: 11px;
+
+    -fx-text-fill: #6b7280;
+}
+
+/* LABELS */
+.label-form {
+
+    -fx-font-size: 15px;
+
+    -fx-text-fill: #111827;
+
+    -fx-alignment: center-left;
+}
+
+/* INPUTS */
+.input {
+
+    -fx-background-color: white;
+
+    -fx-border-color: #d1d5db;
+
+    -fx-border-radius: 8;
+
+    -fx-background-radius: 8;
+
+    -fx-font-size: 15px;
+
+    -fx-padding: 0 18 0 18;
+
+    -fx-prompt-text-fill: #b6bcc6;
+}
+
+.input:focused {
+
+    -fx-border-color: #1e90ff;
+
+    -fx-border-width: 1.5;
+}
+
+/* BOTON */
 .btn-login {
 
-    -fx-background-color: #3b82f6;
+    -fx-background-color: black;
 
     -fx-text-fill: white;
 
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
 
-    -fx-background-radius: 10;
+    -fx-font-weight: bold;
 
-    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+
+    -fx-border-radius: 8;
+
+    -fx-cursor: hand;
 }
 
 .btn-login:hover {
 
-    -fx-background-color: #2563eb;
+    -fx-background-color: #111111;
+}
 
-    -fx-cursor: hand;
+
+
+.dashboard-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.dashboard-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600" prefWidth="1000"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            styleClass="dashboard-root">
+
+    <Label text="Bienvenido al sistema SIG-CB"
+           layoutX="350"
+           layoutY="250"
+           styleClass="dashboard-title"/>
+
+</AnchorPane>
