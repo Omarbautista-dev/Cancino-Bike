@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.VentasController"
+            prefWidth="1100"
+            prefHeight="780"
+            styleClass="root-dashboard">
+
+    <VBox AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          styleClass="main-box">
+
+        <HBox styleClass="header">
+            <ImageView fx:id="logoImage"
+                       fitWidth="58"
+                       fitHeight="58"
+                       preserveRatio="true"/>
+
+            <VBox styleClass="title-box">
+                <Label text="Refaccionaria" styleClass="title"/>
+                <Label text="Cancino Bike" styleClass="title"/>
+            </VBox>
+        </HBox>
+
+        <HBox styleClass="menu-bar">
+            <Button text="Dashboard" onAction="#abrirDashboard" styleClass="menu-button"/>
+            <Button text="Buscar modelo" onAction="#enfocarBusqueda" styleClass="menu-button"/>
+            <Button text="Registrar venta" onAction="#registrarVenta" styleClass="menu-button"/>
+            <Button text="Ticket" onAction="#mostrarInfoTicket" styleClass="menu-button"/>
+            <Button text="Cancelar" onAction="#cancelarVenta" styleClass="menu-button"/>
+        </HBox>
+
+        <VBox VBox.vgrow="ALWAYS" styleClass="content">
+
+            <HBox styleClass="module-title-bar">
+                <Label text="VENTAS" styleClass="module-title"/>
+            </HBox>
+
+            <HBox spacing="10" styleClass="venta-panel">
+
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="Buscar producto" styleClass="form-title"/>
+
+                    <TextField fx:id="txtBuscarProducto"
+                               promptText="Código, modelo o nombre"
+                               prefWidth="420"/>
+
+                    <TableView fx:id="tablaProductos" prefHeight="250">
+                        <columns>
+                            <TableColumn fx:id="colCodigo" text="Código" prefWidth="110"/>
+                            <TableColumn fx:id="colModelo" text="Modelo" prefWidth="110"/>
+                            <TableColumn fx:id="colProducto" text="Producto" prefWidth="220"/>
+                            <TableColumn fx:id="colStock" text="Stock" prefWidth="70"/>
+                            <TableColumn fx:id="colMenudeo" text="Menudeo" prefWidth="90"/>
+                            <TableColumn fx:id="colMayoreo" text="Mayoreo" prefWidth="90"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="8">
+                        <Label text="Cantidad:" styleClass="form-label"/>
+                        <TextField fx:id="txtCantidad" text="1" prefWidth="80"/>
+                        <Button text="Agregar al carrito"
+                                onAction="#agregarAlCarrito"
+                                styleClass="menu-button"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="Carrito de venta" styleClass="form-title"/>
+
+                    <TableView fx:id="tablaCarrito" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="colCarCodigo" text="Código" prefWidth="110"/>
+                            <TableColumn fx:id="colCarProducto" text="Producto" prefWidth="230"/>
+                            <TableColumn fx:id="colCarCantidad" text="Cant." prefWidth="70"/>
+                            <TableColumn fx:id="colCarPrecio" text="Precio" prefWidth="90"/>
+                            <TableColumn fx:id="colCarSubtotal" text="Subtotal" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="8">
+                        <Button text="Quitar producto"
+                                onAction="#quitarProductoCarrito"
+                                styleClass="menu-button"/>
+                        <Button text="Vaciar carrito"
+                                onAction="#cancelarVenta"
+                                styleClass="menu-button"/>
+                    </HBox>
+
+                    <HBox spacing="8">
+                        <Label text="Tipo precio:" styleClass="form-label"/>
+                        <ComboBox fx:id="cbTipoPrecio" prefWidth="140"/>
+                        <Label text="Tipo venta:" styleClass="form-label"/>
+                        <ComboBox fx:id="cbTipoVenta" prefWidth="140"/>
+                    </HBox>
+
+                    <HBox spacing="8">
+                        <Label text="Descuento:" styleClass="form-label"/>
+                        <TextField fx:id="txtDescuento" text="0" prefWidth="100"/>
+                    </HBox>
+
+                    <VBox styleClass="totales-box">
+                        <Label fx:id="lblSubtotal" text="Subtotal: $0.00" styleClass="total-label-small"/>
+                        <Label fx:id="lblDescuento" text="Descuento: $0.00" styleClass="total-label-small"/>
+                        <Label fx:id="lblTotal" text="Total: $0.00" styleClass="total-label"/>
+                    </VBox>
+
+                    <Button text="REGISTRAR VENTA"
+                            onAction="#registrarVenta"
+                            styleClass="btn-registrar"/>
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>
