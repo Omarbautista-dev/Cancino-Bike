@@ -32,7 +32,7 @@ public class InventarioController {
     @FXML private TableColumn<Producto, Integer> colStock;
     @FXML private TableColumn<Producto, Integer> colMinimo;
     @FXML private TableColumn<Producto, String> colProveedor;
-
+    @FXML private TextField txtBuscar;
     @FXML private Label lblCantidadProductos;
     @FXML private Label lblCostoInventario;
 
@@ -68,6 +68,7 @@ public class InventarioController {
         cargarProveedores();
         cargarProductos();
         detectarSeleccionTabla();
+        configurarBusqueda();
     }
 
     private void cargarLogo() {
@@ -115,6 +116,16 @@ public class InventarioController {
         cbProveedor.setItems(
                 FXCollections.observableArrayList(productoModel.listarProveedores())
         );
+    }
+
+    private void configurarBusqueda() {
+        txtBuscar.textProperty().addListener((obs, oldValue, newValue) -> {
+            tablaInventario.setItems(
+                    FXCollections.observableArrayList(
+                            productoModel.buscarProductos(newValue)
+                    )
+            );
+        });
     }
 
     private void detectarSeleccionTabla() {

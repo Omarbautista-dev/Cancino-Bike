@@ -69,12 +69,6 @@
                 <Label text="INVENTARIO" styleClass="module-title"/>
             </HBox>
 
-            <HBox styleClass="action-bar">
-                <Button text="Actualizar stock" onAction="#modoActualizarStock" styleClass="menu-button"/>
-                <Button text="Control de lotes" onAction="#modoControlLotes" styleClass="menu-button"/>
-                <Button text="Ajuste de inventario" onAction="#modoAjusteInventario" styleClass="menu-button"/>
-                <Button text="Actualizar precios" onAction="#modoActualizarPrecios" styleClass="menu-button"/>
-            </HBox>
 
             <HBox styleClass="info-bar">
                 <Label text="REPORTE DE INVENTARIO" styleClass="info-label"/>

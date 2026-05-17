@@ -96,6 +96,69 @@ public class ProductoModel {
         }
     }
 
+    public List<Producto> buscarProductos(String filtro) {
+        List<Producto> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT
+            p.id_producto,
+            p.codigo_barras,
+            p.modelo,
+            p.nombre_producto,
+            p.descripcion,
+            p.precio_compra,
+            p.precio_menudeo,
+            p.precio_mayoreo,
+            p.stock,
+            p.stock_minimo,
+            IFNULL(p.id_proveedor, 0) AS id_proveedor,
+            IFNULL(pr.nombre_empresa, 'Sin proveedor') AS proveedor
+        FROM productos p
+        LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
+        WHERE p.estado = 1
+        AND (
+            p.codigo_barras LIKE ?
+            OR p.modelo LIKE ?
+            OR p.nombre_producto LIKE ?
+        )
+        ORDER BY p.id_producto DESC
+        """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            String busqueda = "%" + filtro + "%";
+
+            ps.setString(1, busqueda);
+            ps.setString(2, busqueda);
+            ps.setString(3, busqueda);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lista.add(new Producto(
+                        rs.getInt("id_producto"),
+                        rs.getString("codigo_barras"),
+                        rs.getString("modelo"),
+                        rs.getString("nombre_producto"),
+                        rs.getString("descripcion"),
+                        rs.getDouble("precio_compra"),
+                        rs.getDouble("precio_menudeo"),
+                        rs.getDouble("precio_mayoreo"),
+                        rs.getInt("stock"),
+                        rs.getInt("stock_minimo"),
+                        rs.getInt("id_proveedor"),
+                        rs.getString("proveedor")
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
     public boolean actualizarProducto(int idProducto, String codigo, String modelo, String nombre,
                                       String descripcion, double compra, double menudeo,
                                       double mayoreo, int stock, int minimo, int idProveedor) {
