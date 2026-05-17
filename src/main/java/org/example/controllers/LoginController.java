@@ -49,6 +49,10 @@ public class LoginController {
             Scene scene = new Scene(loader.load(), 1100, 780);
 
             scene.getStylesheets().add(
+                    getClass().getResource("/org/example/css/global.css").toExternalForm()
+            );
+
+            scene.getStylesheets().add(
                     getClass().getResource("/org/example/css/dashboard.css").toExternalForm()
             );
 
