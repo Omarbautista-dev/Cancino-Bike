@@ -96,6 +96,32 @@ public class ProductoModel {
         }
     }
 
+    public boolean existeCodigoBarras(String codigo) {
+        String sql = """
+        SELECT COUNT(*) AS total
+        FROM productos
+        WHERE codigo_barras = ?
+        AND estado = 1
+        """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, codigo);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total") > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public List<Producto> buscarProductos(String filtro) {
         List<Producto> lista = new ArrayList<>();
 

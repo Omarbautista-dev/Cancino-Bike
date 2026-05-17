@@ -128,6 +128,8 @@ public class InventarioController {
         });
     }
 
+
+
     private void detectarSeleccionTabla() {
         tablaInventario.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSelection, producto) -> {
@@ -167,6 +169,10 @@ public class InventarioController {
         try {
             if (!validarCampos()) return;
 
+            if (productoModel.existeCodigoBarras(txtCodigo.getText().trim())) {
+                mostrarMensaje("Ya existe un producto con ese código de barras.");
+                return;
+            }
             ProveedorItem proveedor = cbProveedor.getValue();
 
             boolean ok = productoModel.insertarProducto(
@@ -325,12 +331,30 @@ public class InventarioController {
             return;
         }
 
-        boolean ok = productoModel.eliminarProducto(productoSeleccionado.getIdProducto());
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar eliminación");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText(
+                "¿Seguro que deseas eliminar el producto?\n\n" +
+                        productoSeleccionado.getNombreProducto()
+        );
+
+        ButtonType resultado = confirmacion.showAndWait().orElse(ButtonType.CANCEL);
+
+        if (resultado != ButtonType.OK) {
+            return;
+        }
+
+        boolean ok = productoModel.eliminarProducto(
+                productoSeleccionado.getIdProducto()
+        );
 
         if (ok) {
             mostrarMensaje("Producto eliminado correctamente.");
             cargarProductos();
             limpiarFormulario();
+        } else {
+            mostrarMensaje("No se pudo eliminar el producto.");
         }
     }
 
@@ -448,26 +472,68 @@ public class InventarioController {
     }
 
     private boolean validarCampos() {
-        if (txtCodigo.getText().trim().isEmpty()
-                || txtModelo.getText().trim().isEmpty()
-                || txtNombre.getText().trim().isEmpty()
-                || txtCompra.getText().trim().isEmpty()
-                || txtMenudeo.getText().trim().isEmpty()
-                || txtMayoreo.getText().trim().isEmpty()
-                || txtStock.getText().trim().isEmpty()
-                || txtMinimo.getText().trim().isEmpty()
-                || cbProveedor.getValue() == null) {
 
-            mostrarMensaje("Completa los campos obligatorios.");
+        if (txtCodigo.getText().trim().isEmpty()) {
+            mostrarMensaje("Ingresa el código de barras.");
+            return false;
+        }
+
+        if (txtModelo.getText().trim().isEmpty()) {
+            mostrarMensaje("Ingresa el modelo.");
+            return false;
+        }
+
+        if (txtNombre.getText().trim().isEmpty()) {
+            mostrarMensaje("Ingresa el nombre del producto.");
+            return false;
+        }
+
+        if (txtCompra.getText().trim().isEmpty()
+                || txtMenudeo.getText().trim().isEmpty()
+                || txtMayoreo.getText().trim().isEmpty()) {
+            mostrarMensaje("Ingresa todos los precios.");
+            return false;
+        }
+
+        if (txtStock.getText().trim().isEmpty()
+                || txtMinimo.getText().trim().isEmpty()) {
+            mostrarMensaje("Ingresa stock y stock mínimo.");
+            return false;
+        }
+
+        if (cbProveedor.getValue() == null) {
+            mostrarMensaje("Selecciona un proveedor.");
             return false;
         }
 
         try {
-            Double.parseDouble(txtCompra.getText().trim());
-            Double.parseDouble(txtMenudeo.getText().trim());
-            Double.parseDouble(txtMayoreo.getText().trim());
-            Integer.parseInt(txtStock.getText().trim());
-            Integer.parseInt(txtMinimo.getText().trim());
+            double compra = Double.parseDouble(txtCompra.getText().trim());
+            double menudeo = Double.parseDouble(txtMenudeo.getText().trim());
+            double mayoreo = Double.parseDouble(txtMayoreo.getText().trim());
+
+            int stock = Integer.parseInt(txtStock.getText().trim());
+            int minimo = Integer.parseInt(txtMinimo.getText().trim());
+
+            if (compra < 0 || menudeo < 0 || mayoreo < 0) {
+                mostrarMensaje("Los precios no pueden ser negativos.");
+                return false;
+            }
+
+            if (stock < 0 || minimo < 0) {
+                mostrarMensaje("El stock no puede ser negativo.");
+                return false;
+            }
+
+            if (menudeo < compra) {
+                mostrarMensaje("El precio menudeo no debería ser menor al precio de compra.");
+                return false;
+            }
+
+            if (mayoreo < compra) {
+                mostrarMensaje("El precio mayoreo no debería ser menor al precio de compra.");
+                return false;
+            }
+
         } catch (NumberFormatException e) {
             mostrarMensaje("Precios y stock deben ser valores numéricos.");
             return false;
