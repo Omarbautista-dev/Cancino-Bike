@@ -1,0 +1,20 @@
+.inventario-table {
+    -fx-font-size: 12px;
+}
+
+.inventario-table .column-header {
+    -fx-background-color: #d6d6d6;
+}
+
+.inventario-table .column-header .label {
+    -fx-text-fill: #111;
+    -fx-font-weight: bold;
+}
+
+.inventario-table .table-row-cell:selected {
+    -fx-background-color: #b7c9e8;
+}
+
+.inventario-table .table-cell {
+    -fx-padding: 5px;
+}

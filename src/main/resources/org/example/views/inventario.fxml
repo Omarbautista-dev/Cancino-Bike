@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.InventarioController"
+            prefWidth="1100"
+            prefHeight="780"
+            styleClass="root-dashboard">
+
+    <VBox AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          styleClass="main-box">
+
+        <HBox styleClass="header">
+            <ImageView fx:id="logoImage"
+                       fitWidth="58"
+                       fitHeight="58"
+                       preserveRatio="true"/>
+
+            <VBox styleClass="title-box">
+                <Label text="Refaccionaria" styleClass="title"/>
+                <Label text="Cancino Bike" styleClass="title"/>
+            </VBox>
+        </HBox>
+
+        <HBox styleClass="menu-bar">
+            <Button text="Dashboard" onAction="#abrirDashboard" styleClass="menu-button"/>
+            <Button text="Ventas" onAction="#abrirVentas" styleClass="menu-button"/>
+            <Button text="Inventario" onAction="#abrirInventario" styleClass="menu-button"/>
+            <Button text="Proveedores" onAction="#abrirProveedores" styleClass="menu-button"/>
+            <Button text="Reportes" onAction="#abrirReportes" styleClass="menu-button"/>
+            <Button text="Seguridad" onAction="#abrirSeguridad" styleClass="menu-button"/>
+            <Button text="Salir" onAction="#cerrarSesion" styleClass="menu-button"/>
+        </HBox>
+
+        <VBox VBox.vgrow="ALWAYS" styleClass="content">
+
+            <HBox styleClass="module-title-bar">
+                <Label text="INVENTARIO" styleClass="module-title"/>
+            </HBox>
+
+            <HBox styleClass="action-bar">
+                <Button text="Actualizar stock" styleClass="menu-button"/>
+                <Button text="Control de lotes" styleClass="menu-button"/>
+                <Button text="Ajuste de inventario" styleClass="menu-button"/>
+                <Button text="Actualizar precios" styleClass="menu-button"/>
+            </HBox>
+
+            <HBox styleClass="info-bar">
+                <Label text="REPORTE DE INVENTARIO" styleClass="info-label"/>
+                <Label fx:id="lblCantidadProductos"
+                       text="Cantidad de productos: 0"
+                       styleClass="info-label"/>
+                <Label fx:id="lblCostoInventario"
+                       text="Costo de inventario: $0.00"
+                       styleClass="info-label"/>
+            </HBox>
+
+            <TableView fx:id="tablaInventario" VBox.vgrow="ALWAYS" styleClass="inventario-table">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="55"/>
+                    <TableColumn fx:id="colCodigo" text="Código" prefWidth="110"/>
+                    <TableColumn fx:id="colModelo" text="Modelo" prefWidth="110"/>
+                    <TableColumn fx:id="colProducto" text="Producto" prefWidth="170"/>
+                    <TableColumn fx:id="colDescripcion" text="Descripción" prefWidth="170"/>
+                    <TableColumn fx:id="colCompra" text="Compra" prefWidth="80"/>
+                    <TableColumn fx:id="colMenudeo" text="Menudeo" prefWidth="80"/>
+                    <TableColumn fx:id="colMayoreo" text="Mayoreo" prefWidth="80"/>
+                    <TableColumn fx:id="colStock" text="Stock" prefWidth="70"/>
+                    <TableColumn fx:id="colMinimo" text="Mínimo" prefWidth="70"/>
+                    <TableColumn fx:id="colProveedor" text="Proveedor" prefWidth="145"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>
