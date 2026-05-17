@@ -7,7 +7,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -81,16 +82,24 @@ public class DashboardController {
     @FXML
     private void cerrarSesion() {
         try {
-            Parent login = FXMLLoader.load(
-                    Objects.requireNonNull(
-                            getClass().getResource("/org/example/views/login.fxml")
-                    )
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/example/views/login.fxml")
             );
 
-            contentPane.getScene().setRoot(login);
+            Scene scene = new Scene(loader.load(), 710, 610);
 
-        } catch (IOException e) {
-            mostrarMensaje("Error al cerrar sesión");
+            scene.getStylesheets().add(
+                    getClass().getResource("/org/example/css/styles.css").toExternalForm()
+            );
+
+            Stage stage = (Stage) contentPane.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("SIG-CB - Login");
+            stage.centerOnScreen();
+
+        } catch (Exception e) {
+            mostrarMensaje("Error al cerrar sesión: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
