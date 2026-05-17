@@ -1,16 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600" prefWidth="1000"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            styleClass="dashboard-root">
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.DashboardController"
+            prefWidth="1100"
+            prefHeight="780"
+            styleClass="root-dashboard">
 
-    <Label text="Bienvenido al sistema SIG-CB"
-           layoutX="350"
-           layoutY="250"
-           styleClass="dashboard-title"/>
+    <VBox AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          styleClass="main-box">
+
+        <HBox styleClass="header">
+            <ImageView fx:id="logoImage"
+                       fitWidth="58"
+                       fitHeight="58"
+                       preserveRatio="true"/>
+
+            <VBox styleClass="title-box">
+                <Label text="Refaccionaria" styleClass="title"/>
+                <Label text="Cancino Bike" styleClass="title"/>
+            </VBox>
+        </HBox>
+
+        <HBox styleClass="menu-bar">
+            <Button text="Ventas" onAction="#abrirVentas" styleClass="menu-button"/>
+            <Button text="Clientes" onAction="#abrirClientes" styleClass="menu-button"/>
+            <Button text="Productos" onAction="#abrirProductos" styleClass="menu-button"/>
+            <Button text="Inventario" onAction="#abrirInventario" styleClass="menu-button"/>
+            <Button text="Facturas" onAction="#abrirFacturas" styleClass="menu-button"/>
+            <Button text="Catálogos" onAction="#abrirCatalogos" styleClass="menu-button"/>
+            <Button text="Datos Personales" onAction="#abrirDatosPersonales" styleClass="menu-button"/>
+            <Button text="Usuarios" onAction="#abrirUsuarios" styleClass="menu-button"/>
+            <Button text="Cambiar Password" onAction="#abrirCambiarPassword" styleClass="menu-button"/>
+            <Button text="Salir" onAction="#cerrarSesion" styleClass="menu-button"/>
+        </HBox>
+
+        <AnchorPane styleClass="separator"/>
+
+        <AnchorPane fx:id="contentPane" VBox.vgrow="ALWAYS" styleClass="content">
+            <VBox alignment="CENTER"
+                  AnchorPane.topAnchor="0"
+                  AnchorPane.bottomAnchor="0"
+                  AnchorPane.leftAnchor="0"
+                  AnchorPane.rightAnchor="0">
+
+                <Label text="Refaccionaria" styleClass="watermark"/>
+                <Label text="Cancino Bike" styleClass="watermark"/>
+
+            </VBox>
+        </AnchorPane>
+
+    </VBox>
 
 </AnchorPane>

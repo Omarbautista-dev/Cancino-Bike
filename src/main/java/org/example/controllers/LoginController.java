@@ -46,10 +46,10 @@ public class LoginController {
                     getClass().getResource("/org/example/views/dashboard.fxml")
             );
 
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 1100, 780);
 
             scene.getStylesheets().add(
-                    getClass().getResource("/org/example/css/styles.css").toExternalForm()
+                    getClass().getResource("/org/example/css/dashboard.css").toExternalForm()
             );
 
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
@@ -59,6 +59,7 @@ public class LoginController {
 
         } catch (Exception e) {
             mostrarAlerta("Error", "No se pudo abrir el dashboard: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

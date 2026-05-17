@@ -1,0 +1,71 @@
+.root-dashboard {
+    -fx-background-color: #202020;
+    -fx-font-family: "Arial";
+}
+
+.main-box {
+    -fx-background-color: #e8edf1;
+    -fx-border-color: #111;
+    -fx-border-width: 1px;
+}
+
+.header {
+    -fx-background-color: #bcbcbc;
+    -fx-padding: 18px 25px;
+    -fx-spacing: 25px;
+    -fx-alignment: center-left;
+    -fx-border-color: #111;
+    -fx-border-width: 0 0 1px 0;
+    -fx-pref-height: 88px;
+}
+
+.title-box {
+    -fx-alignment: center-left;
+}
+
+.title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.menu-bar {
+    -fx-background-color: #e8edf1;
+    -fx-padding: 4px;
+    -fx-spacing: 4px;
+    -fx-border-color: #111;
+    -fx-border-width: 0 0 1px 0;
+    -fx-pref-height: 42px;
+}
+
+.menu-button {
+    -fx-background-color: #d6d6d6;
+    -fx-border-color: #333;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 7px 18px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #111;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #c4c4c4;
+}
+
+.separator {
+    -fx-background-color: #bcbcbc;
+    -fx-pref-height: 32px;
+    -fx-border-color: #111;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.content {
+    -fx-background-color: #e8edf1;
+}
+
+.watermark {
+    -fx-font-size: 74px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(120, 120, 120, 0.13);
+}

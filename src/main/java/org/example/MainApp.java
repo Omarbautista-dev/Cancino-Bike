@@ -16,8 +16,16 @@ public class MainApp extends Application {
 
         Scene scene = new Scene(loader.load());
 
+
+
+
         scene.getStylesheets().add(
                 MainApp.class.getResource("/org/example/css/styles.css").toExternalForm()
+
+        );
+        scene.getStylesheets().add(
+
+                MainApp.class.getResource("/org/example/css/dashboard.css").toExternalForm()
         );
 
         stage.setTitle("SIG-CB - Login");
