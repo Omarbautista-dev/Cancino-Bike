@@ -33,14 +33,10 @@
 
         <HBox styleClass="menu-bar">
             <Button text="Ventas" onAction="#abrirVentas" styleClass="menu-button"/>
-            <Button text="Clientes" onAction="#abrirClientes" styleClass="menu-button"/>
-            <Button text="Productos" onAction="#abrirProductos" styleClass="menu-button"/>
             <Button text="Inventario" onAction="#abrirInventario" styleClass="menu-button"/>
-            <Button text="Facturas" onAction="#abrirFacturas" styleClass="menu-button"/>
-            <Button text="Catálogos" onAction="#abrirCatalogos" styleClass="menu-button"/>
-            <Button text="Datos Personales" onAction="#abrirDatosPersonales" styleClass="menu-button"/>
-            <Button text="Usuarios" onAction="#abrirUsuarios" styleClass="menu-button"/>
-            <Button text="Cambiar Password" onAction="#abrirCambiarPassword" styleClass="menu-button"/>
+            <Button text="Proveedores" onAction="#abrirProveedores" styleClass="menu-button"/>
+            <Button text="Reportes" onAction="#abrirReportes" styleClass="menu-button"/>
+            <Button text="Seguridad" onAction="#abrirSeguridad" styleClass="menu-button"/>
             <Button text="Salir" onAction="#cerrarSesion" styleClass="menu-button"/>
         </HBox>
 

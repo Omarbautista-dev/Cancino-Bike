@@ -12,11 +12,14 @@ public class Producto {
     private double precioMayoreo;
     private int stock;
     private int stockMinimo;
+    private int idProveedor;
     private String proveedor;
 
     public Producto(int idProducto, String codigoBarras, String modelo, String nombreProducto,
                     String descripcion, double precioCompra, double precioMenudeo,
-                    double precioMayoreo, int stock, int stockMinimo, String proveedor) {
+                    double precioMayoreo, int stock, int stockMinimo,
+                    int idProveedor, String proveedor) {
+
         this.idProducto = idProducto;
         this.codigoBarras = codigoBarras;
         this.modelo = modelo;
@@ -27,6 +30,7 @@ public class Producto {
         this.precioMayoreo = precioMayoreo;
         this.stock = stock;
         this.stockMinimo = stockMinimo;
+        this.idProveedor = idProveedor;
         this.proveedor = proveedor;
     }
 
@@ -40,5 +44,6 @@ public class Producto {
     public double getPrecioMayoreo() { return precioMayoreo; }
     public int getStock() { return stock; }
     public int getStockMinimo() { return stockMinimo; }
+    public int getIdProveedor() { return idProveedor; }
     public String getProveedor() { return proveedor; }
 }

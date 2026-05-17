@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.controllers.InventarioController"
@@ -34,13 +36,31 @@
         </HBox>
 
         <HBox styleClass="menu-bar">
-            <Button text="Dashboard" onAction="#abrirDashboard" styleClass="menu-button"/>
-            <Button text="Ventas" onAction="#abrirVentas" styleClass="menu-button"/>
-            <Button text="Inventario" onAction="#abrirInventario" styleClass="menu-button"/>
-            <Button text="Proveedores" onAction="#abrirProveedores" styleClass="menu-button"/>
-            <Button text="Reportes" onAction="#abrirReportes" styleClass="menu-button"/>
-            <Button text="Seguridad" onAction="#abrirSeguridad" styleClass="menu-button"/>
-            <Button text="Salir" onAction="#cerrarSesion" styleClass="menu-button"/>
+
+            <Button text="Dashboard"
+                    onAction="#abrirDashboard"
+                    styleClass="menu-button"/>
+
+            <Button text="Productos"
+                    onAction="#modoProductos"
+                    styleClass="menu-button"/>
+
+            <Button text="Actualizar stock"
+                    onAction="#modoActualizarStock"
+                    styleClass="menu-button"/>
+
+            <Button text="Lotes"
+                    onAction="#modoControlLotes"
+                    styleClass="menu-button"/>
+
+            <Button text="Ajustes"
+                    onAction="#modoAjusteInventario"
+                    styleClass="menu-button"/>
+
+            <Button text="Precios"
+                    onAction="#modoActualizarPrecios"
+                    styleClass="menu-button"/>
+
         </HBox>
 
         <VBox VBox.vgrow="ALWAYS" styleClass="content">
@@ -50,10 +70,10 @@
             </HBox>
 
             <HBox styleClass="action-bar">
-                <Button text="Actualizar stock" styleClass="menu-button"/>
-                <Button text="Control de lotes" styleClass="menu-button"/>
-                <Button text="Ajuste de inventario" styleClass="menu-button"/>
-                <Button text="Actualizar precios" styleClass="menu-button"/>
+                <Button text="Actualizar stock" onAction="#modoActualizarStock" styleClass="menu-button"/>
+                <Button text="Control de lotes" onAction="#modoControlLotes" styleClass="menu-button"/>
+                <Button text="Ajuste de inventario" onAction="#modoAjusteInventario" styleClass="menu-button"/>
+                <Button text="Actualizar precios" onAction="#modoActualizarPrecios" styleClass="menu-button"/>
             </HBox>
 
             <HBox styleClass="info-bar">
@@ -81,6 +101,35 @@
                     <TableColumn fx:id="colProveedor" text="Proveedor" prefWidth="145"/>
                 </columns>
             </TableView>
+
+            <VBox styleClass="form-panel" spacing="8">
+
+                <Label text="DATOS DEL PRODUCTO" styleClass="form-title"/>
+
+                <HBox spacing="8">
+                    <TextField fx:id="txtCodigo" promptText="Código de barras" prefWidth="150"/>
+                    <TextField fx:id="txtModelo" promptText="Modelo" prefWidth="130"/>
+                    <TextField fx:id="txtNombre" promptText="Nombre del producto" prefWidth="220"/>
+                    <TextField fx:id="txtDescripcion" promptText="Descripción" prefWidth="250"/>
+                </HBox>
+
+                <HBox spacing="8">
+                    <TextField fx:id="txtCompra" promptText="Precio compra" prefWidth="130"/>
+                    <TextField fx:id="txtMenudeo" promptText="Precio menudeo" prefWidth="130"/>
+                    <TextField fx:id="txtMayoreo" promptText="Precio mayoreo" prefWidth="130"/>
+                    <TextField fx:id="txtStock" promptText="Stock" prefWidth="100"/>
+                    <TextField fx:id="txtMinimo" promptText="Stock mínimo" prefWidth="120"/>
+                    <ComboBox fx:id="cbProveedor" promptText="Proveedor" prefWidth="180"/>
+                </HBox>
+
+                <HBox spacing="8">
+                    <Button text="Nuevo" onAction="#limpiarFormulario" styleClass="menu-button"/>
+                    <Button text="Guardar" onAction="#guardarProducto" styleClass="menu-button"/>
+                    <Button text="Actualizar" onAction="#actualizarProducto" styleClass="menu-button"/>
+                    <Button text="Eliminar" onAction="#eliminarProducto" styleClass="menu-button"/>
+                </HBox>
+
+            </VBox>
 
         </VBox>
 
