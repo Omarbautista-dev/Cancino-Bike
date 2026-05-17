@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.DatePicker?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.controllers.VentasController"
             prefWidth="1100"
@@ -98,6 +98,15 @@
                         <ComboBox fx:id="cbTipoPrecio" prefWidth="140"/>
                         <Label text="Tipo venta:" styleClass="form-label"/>
                         <ComboBox fx:id="cbTipoVenta" prefWidth="140"/>
+
+                        <HBox spacing="8" fx:id="panelCredito">
+                            <Label text="Cliente:" styleClass="form-label"/>
+                            <ComboBox fx:id="cbCliente" prefWidth="180"/>
+
+                            <Label text="Fecha límite:" styleClass="form-label"/>
+                            <DatePicker fx:id="dpFechaLimite" prefWidth="150"/>
+                        </HBox>
+
                     </HBox>
 
                     <HBox spacing="8">

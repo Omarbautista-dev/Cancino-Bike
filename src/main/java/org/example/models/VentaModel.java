@@ -72,39 +72,49 @@ public class VentaModel {
         return lista;
     }
 
-    public boolean registrarVenta(String folio,
-                                  int idUsuario,
-                                  String tipoVenta,
-                                  String tipoPrecio,
-                                  double subtotal,
-                                  double descuento,
-                                  double total,
-                                  List<DetalleVentaItem> carrito) {
+    public boolean registrarVenta(
+            String folio,
+            int idUsuario,
+            Integer idCliente,
+            String fechaLimite,
+            String tipoVenta,
+            String tipoPrecio,
+            double subtotal,
+            double descuento,
+            double total,
+            List<DetalleVentaItem> carrito
+    ) {
 
         String sqlVenta = """
-            INSERT INTO ventas
-            (folio, id_usuario, id_cliente, tipo_venta, tipo_precio, subtotal, descuento, total, estado)
-            VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?)
-            """;
+        INSERT INTO ventas
+        (folio, id_usuario, id_cliente, tipo_venta, tipo_precio, subtotal, descuento, total, estado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
         String sqlDetalle = """
-            INSERT INTO detalle_ventas
-            (id_venta, id_producto, cantidad, precio_unitario, subtotal)
-            VALUES (?, ?, ?, ?, ?)
-            """;
+        INSERT INTO detalle_ventas
+        (id_venta, id_producto, cantidad, precio_unitario, subtotal)
+        VALUES (?, ?, ?, ?, ?)
+        """;
 
         String sqlStock = """
-            UPDATE productos
-            SET stock = stock - ?
-            WHERE id_producto = ?
-            AND stock >= ?
-            """;
+        UPDATE productos
+        SET stock = stock - ?
+        WHERE id_producto = ?
+        AND stock >= ?
+        """;
 
         String sqlTicket = """
-            INSERT INTO tickets
-            (id_venta, folio_ticket, total)
-            VALUES (?, ?, ?)
-            """;
+        INSERT INTO tickets
+        (id_venta, folio_ticket, total)
+        VALUES (?, ?, ?)
+        """;
+
+        String sqlCredito = """
+        INSERT INTO creditos
+        (id_venta, id_cliente, monto_total, monto_pagado, saldo_pendiente, estado, fecha_limite)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
 
         try (Connection con = ConexionBD.conectar()) {
 
@@ -114,12 +124,19 @@ public class VentaModel {
 
                 psVenta.setString(1, folio);
                 psVenta.setInt(2, idUsuario);
-                psVenta.setString(3, tipoVenta);
-                psVenta.setString(4, tipoPrecio);
-                psVenta.setDouble(5, subtotal);
-                psVenta.setDouble(6, descuento);
-                psVenta.setDouble(7, total);
-                psVenta.setString(8, tipoVenta.equals("CREDITO") ? "PENDIENTE" : "PAGADA");
+
+                if (idCliente == null) {
+                    psVenta.setNull(3, Types.INTEGER);
+                } else {
+                    psVenta.setInt(3, idCliente);
+                }
+
+                psVenta.setString(4, tipoVenta);
+                psVenta.setString(5, tipoPrecio);
+                psVenta.setDouble(6, subtotal);
+                psVenta.setDouble(7, descuento);
+                psVenta.setDouble(8, total);
+                psVenta.setString(9, tipoVenta.equals("CREDITO") ? "PENDIENTE" : "PAGADA");
 
                 psVenta.executeUpdate();
 
@@ -138,13 +155,6 @@ public class VentaModel {
 
                     for (DetalleVentaItem item : carrito) {
 
-                        psDetalle.setInt(1, idVenta);
-                        psDetalle.setInt(2, item.getIdProducto());
-                        psDetalle.setInt(3, item.getCantidad());
-                        psDetalle.setDouble(4, item.getPrecioUnitario());
-                        psDetalle.setDouble(5, item.getSubtotal());
-                        psDetalle.addBatch();
-
                         psStock.setInt(1, item.getCantidad());
                         psStock.setInt(2, item.getIdProducto());
                         psStock.setInt(3, item.getCantidad());
@@ -155,6 +165,13 @@ public class VentaModel {
                             con.rollback();
                             return false;
                         }
+
+                        psDetalle.setInt(1, idVenta);
+                        psDetalle.setInt(2, item.getIdProducto());
+                        psDetalle.setInt(3, item.getCantidad());
+                        psDetalle.setDouble(4, item.getPrecioUnitario());
+                        psDetalle.setDouble(5, item.getSubtotal());
+                        psDetalle.addBatch();
                     }
 
                     psDetalle.executeBatch();
@@ -163,6 +180,26 @@ public class VentaModel {
                     psTicket.setString(2, "TCK-" + folio);
                     psTicket.setDouble(3, total);
                     psTicket.executeUpdate();
+                }
+
+                if (tipoVenta.equals("CREDITO")) {
+
+                    if (idCliente == null || fechaLimite == null) {
+                        con.rollback();
+                        return false;
+                    }
+
+                    try (PreparedStatement psCredito = con.prepareStatement(sqlCredito)) {
+                        psCredito.setInt(1, idVenta);
+                        psCredito.setInt(2, idCliente);
+                        psCredito.setDouble(3, total);
+                        psCredito.setDouble(4, 0);
+                        psCredito.setDouble(5, total);
+                        psCredito.setString(6, "PENDIENTE");
+                        psCredito.setDate(7, Date.valueOf(fechaLimite));
+
+                        psCredito.executeUpdate();
+                    }
                 }
 
                 con.commit();

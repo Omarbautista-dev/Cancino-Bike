@@ -14,7 +14,11 @@ import javafx.scene.input.MouseButton;
 import org.example.models.DetalleVentaItem;
 import org.example.models.Producto;
 import org.example.models.VentaModel;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.DatePicker;
 
+import org.example.models.ClienteItem;
+import org.example.models.ClienteModel;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -49,8 +53,13 @@ public class VentasController {
     @FXML private Label lblDescuento;
     @FXML private Label lblTotal;
 
-    private final VentaModel ventaModel = new VentaModel();
 
+    @FXML private HBox panelCredito;
+    @FXML private ComboBox<ClienteItem> cbCliente;
+    @FXML private DatePicker dpFechaLimite;
+
+    private final VentaModel ventaModel = new VentaModel();
+    private final ClienteModel clienteModel = new ClienteModel();
     private final ObservableList<DetalleVentaItem> carrito =
             FXCollections.observableArrayList();
 
@@ -58,6 +67,7 @@ public class VentasController {
     public void initialize() {
         cargarLogo();
         configurarCombos();
+        configurarCredito();
         configurarTablaProductos();
         configurarTablaCarrito();
         configurarBusqueda();
@@ -65,6 +75,16 @@ public class VentasController {
         configurarDobleClickCarrito();
         editarCantidadCarrito();
         buscarProductos("");
+
+        panelCredito.setVisible(false);
+        panelCredito.setManaged(false);
+
+        cbTipoVenta.valueProperty().addListener((obs, oldValue, newValue) -> {
+            boolean esCredito = "CREDITO".equals(newValue);
+
+            panelCredito.setVisible(esCredito);
+            panelCredito.setManaged(esCredito);
+        });
     }
 
     private void cargarLogo() {
@@ -94,6 +114,27 @@ public class VentasController {
                     calcularTotales();
                 }
             }
+        });
+    }
+
+    private void configurarCredito() {
+
+        panelCredito.setVisible(false);
+        panelCredito.setManaged(false);
+
+        cbCliente.setItems(
+                FXCollections.observableArrayList(
+                        clienteModel.listarClientesActivos()
+                )
+        );
+
+        cbTipoVenta.valueProperty().addListener((obs, oldValue, newValue) -> {
+
+            boolean esCredito = "CREDITO".equals(newValue);
+
+            panelCredito.setVisible(esCredito);
+            panelCredito.setManaged(esCredito);
+
         });
     }
 
@@ -341,9 +382,31 @@ public class VentasController {
 
         int idUsuario = 1;
 
+        Integer idCliente = null;
+        String fechaLimite = null;
+
+        if (cbTipoVenta.getValue().equals("CREDITO")) {
+
+            ClienteItem cliente = cbCliente.getValue();
+
+            if (cliente == null) {
+                mostrarMensaje("Selecciona un cliente.");
+                return;
+            }
+
+            if (dpFechaLimite.getValue() == null) {
+                mostrarMensaje("Selecciona fecha límite.");
+                return;
+            }
+
+            idCliente = cliente.getIdCliente();
+            fechaLimite = dpFechaLimite.getValue().toString();
+        }
         boolean ok = ventaModel.registrarVenta(
                 folio,
                 idUsuario,
+                idCliente,
+                fechaLimite,
                 cbTipoVenta.getValue(),
                 cbTipoPrecio.getValue(),
                 subtotal,
