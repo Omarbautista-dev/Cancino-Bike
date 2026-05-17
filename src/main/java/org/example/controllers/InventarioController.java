@@ -9,7 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
+import javafx.scene.control.TableRow;
 import org.example.models.Producto;
 import org.example.models.ProductoModel;
 import org.example.models.ProveedorItem;
@@ -96,6 +96,24 @@ public class InventarioController {
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         colMinimo.setCellValueFactory(new PropertyValueFactory<>("stockMinimo"));
         colProveedor.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
+
+        tablaInventario.setRowFactory(tv -> new TableRow<Producto>() {
+            @Override
+            protected void updateItem(Producto producto, boolean empty) {
+                super.updateItem(producto, empty);
+
+                if (producto == null || empty) {
+                    setStyle("");
+                    return;
+                }
+
+                if (producto.getStock() <= producto.getStockMinimo()) {
+                    setStyle("-fx-background-color: #ffd6d6;");
+                } else {
+                    setStyle("");
+                }
+            }
+        });
     }
 
     private void cargarProductos() {
@@ -110,6 +128,16 @@ public class InventarioController {
                 .sum();
 
         lblCostoInventario.setText(String.format("Costo de inventario: $%.2f", costoTotal));
+        long stockBajo = productos.stream()
+                .filter(p -> p.getStock() <= p.getStockMinimo())
+                .count();
+
+        if (stockBajo > 0) {
+            lblCantidadProductos.setText(
+                    "Cantidad de productos: " + productos.size() +
+                            " | Stock bajo: " + stockBajo
+            );
+        }
     }
 
     private void cargarProveedores() {
