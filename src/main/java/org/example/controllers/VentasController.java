@@ -125,6 +125,27 @@ public class VentasController {
                         return;
                     }
 
+                    Producto productoOriginal = tablaProductos.getItems()
+                            .stream()
+                            .filter(p -> p.getIdProducto() == item.getIdProducto())
+                            .findFirst()
+                            .orElse(null);
+
+                    if (productoOriginal == null) {
+                        mostrarMensaje("No se encontró el producto.");
+                        return;
+                    }
+
+                    if (nuevaCantidad > productoOriginal.getStock()) {
+                        mostrarMensaje(
+                                "La cantidad supera el stock disponible.\n" +
+                                        "Stock actual: " + productoOriginal.getStock()
+                        );
+
+                        textField.setText(String.valueOf(item.getCantidad()));
+                        return;
+                    }
+
                     item.setCantidad(nuevaCantidad);
                     tablaCarrito.refresh();
                     calcularTotales();
