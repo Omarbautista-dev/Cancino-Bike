@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.controllers.ReportesController"
@@ -61,44 +67,32 @@
 
                 <VBox styleClass="reporte-card">
                     <Label text="TOTAL VENTAS" styleClass="card-title"/>
-                    <Label fx:id="lblTotalVentas"
-                           text="&#36;0.00"
-                           styleClass="card-value"/>
+                    <Label fx:id="lblTotalVentas" text="0.00" styleClass="card-value"/>
                 </VBox>
 
                 <VBox styleClass="reporte-card">
                     <Label text="VENTAS CONTADO" styleClass="card-title"/>
-                    <Label fx:id="lblTotalContado"
-                           text="&#36;0.00"
-                           styleClass="card-value"/>
+                    <Label fx:id="lblTotalContado" text="0.00" styleClass="card-value"/>
                 </VBox>
 
                 <VBox styleClass="reporte-card">
-                    <Label text="VENTAS CRÉDITO" styleClass="card-title"/>
-                    <Label fx:id="lblTotalCredito"
-                           text="&#36;0.00"
-                           styleClass="card-value"/>
+                    <Label text="VENTAS CREDITO" styleClass="card-title"/>
+                    <Label fx:id="lblTotalCredito" text="0.00" styleClass="card-value"/>
                 </VBox>
 
                 <VBox styleClass="reporte-card">
                     <Label text="UTILIDAD ESTIMADA" styleClass="card-title"/>
-                    <Label fx:id="lblUtilidad"
-                           text="&#36;0.00"
-                           styleClass="card-value"/>
+                    <Label fx:id="lblUtilidad" text="0.00" styleClass="card-value"/>
                 </VBox>
 
                 <VBox styleClass="reporte-card">
-                    <Label text="NÚMERO DE VENTAS" styleClass="card-title"/>
-                    <Label fx:id="lblNumeroVentas"
-                           text="0"
-                           styleClass="card-value"/>
+                    <Label text="NUMERO DE VENTAS" styleClass="card-title"/>
+                    <Label fx:id="lblNumeroVentas" text="0" styleClass="card-value"/>
                 </VBox>
 
                 <VBox styleClass="reporte-card">
                     <Label text="VALOR INVENTARIO" styleClass="card-title"/>
-                    <Label fx:id="lblValorInventario"
-                           text="&#36;0.00"
-                           styleClass="card-value"/>
+                    <Label fx:id="lblValorInventario" text="0.00" styleClass="card-value"/>
                 </VBox>
 
             </FlowPane>
