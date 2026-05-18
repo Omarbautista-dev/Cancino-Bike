@@ -9,7 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
+import org.example.models.HistorialCompraProveedor;
 import org.example.models.Proveedor;
 import org.example.models.ProveedorModel;
 
@@ -38,6 +38,16 @@ public class ProveedoresController {
     @FXML private TableColumn<Proveedor, String> colRfc;
     @FXML private TableColumn<Proveedor, String> colDireccion;
 
+    @FXML private TableView<HistorialCompraProveedor> tablaHistorialCompras;
+
+    @FXML private TableColumn<HistorialCompraProveedor, Integer> colHIdCompra;
+    @FXML private TableColumn<HistorialCompraProveedor, String> colHFecha;
+    @FXML private TableColumn<HistorialCompraProveedor, String> colHProducto;
+    @FXML private TableColumn<HistorialCompraProveedor, Integer> colHCantidad;
+    @FXML private TableColumn<HistorialCompraProveedor, Double> colHPrecio;
+    @FXML private TableColumn<HistorialCompraProveedor, Double> colHSubtotal;
+    @FXML private TableColumn<HistorialCompraProveedor, Double> colHTotal;
+
     private final ProveedorModel proveedorModel =
             new ProveedorModel();
 
@@ -45,15 +55,11 @@ public class ProveedoresController {
 
     @FXML
     public void initialize() {
-
         cargarLogo();
-
         configurarTabla();
-
+        configurarTablaHistorial();
         cargarProveedores();
-
         configurarBusqueda();
-
         detectarSeleccionTabla();
     }
 
@@ -165,6 +171,16 @@ public class ProveedoresController {
                         );
                     }
                 });
+    }
+
+    private void configurarTablaHistorial() {
+        colHIdCompra.setCellValueFactory(new PropertyValueFactory<>("idCompra"));
+        colHFecha.setCellValueFactory(new PropertyValueFactory<>("fechaCompra"));
+        colHProducto.setCellValueFactory(new PropertyValueFactory<>("producto"));
+        colHCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        colHPrecio.setCellValueFactory(new PropertyValueFactory<>("precioCompra"));
+        colHSubtotal.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        colHTotal.setCellValueFactory(new PropertyValueFactory<>("totalCompra"));
     }
 
     @FXML
@@ -412,7 +428,40 @@ public class ProveedoresController {
 
     @FXML
     private void mostrarHistorialCompras() {
-        mostrarMensaje("Historial de compras en construcción.");
+
+        if (proveedorSeleccionado == null) {
+            mostrarMensaje("Selecciona un proveedor para ver su historial de compras.");
+            return;
+        }
+
+        tablaProveedores.setVisible(false);
+        tablaProveedores.setManaged(false);
+
+        tablaHistorialCompras.setVisible(true);
+        tablaHistorialCompras.setManaged(true);
+
+        tablaHistorialCompras.setItems(
+                FXCollections.observableArrayList(
+                        proveedorModel.historialComprasPorProveedor(
+                                proveedorSeleccionado.getIdProveedor()
+                        )
+                )
+        );
+
+        mostrarMensaje("Mostrando historial de compras de: " +
+                proveedorSeleccionado.getNombreEmpresa());
+    }
+
+    @FXML
+    private void mostrarDatosProveedores() {
+
+        tablaHistorialCompras.setVisible(false);
+        tablaHistorialCompras.setManaged(false);
+
+        tablaProveedores.setVisible(true);
+        tablaProveedores.setManaged(true);
+
+        cargarProveedores();
     }
 
     @FXML

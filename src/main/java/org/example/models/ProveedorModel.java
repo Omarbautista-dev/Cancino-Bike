@@ -1,7 +1,6 @@
 package org.example.models;
 
 import org.example.database.ConexionBD;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -236,5 +235,50 @@ public class ProveedorModel {
         }
 
         return false;
+    }
+
+    public List<HistorialCompraProveedor> historialComprasPorProveedor(int idProveedor) {
+        List<HistorialCompraProveedor> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            c.id_compra,
+            DATE_FORMAT(c.fecha_compra, '%Y-%m-%d %H:%i') AS fecha_compra,
+            p.nombre_producto,
+            dc.cantidad,
+            dc.precio_compra,
+            dc.subtotal,
+            c.total
+        FROM compras c
+        INNER JOIN detalle_compras dc ON c.id_compra = dc.id_compra
+        INNER JOIN productos p ON dc.id_producto = p.id_producto
+        WHERE c.id_proveedor = ?
+        ORDER BY c.fecha_compra DESC
+        """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idProveedor);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new HistorialCompraProveedor(
+                            rs.getInt("id_compra"),
+                            rs.getString("fecha_compra"),
+                            rs.getString("nombre_producto"),
+                            rs.getInt("cantidad"),
+                            rs.getDouble("precio_compra"),
+                            rs.getDouble("subtotal"),
+                            rs.getDouble("total")
+                    ));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
     }
 }

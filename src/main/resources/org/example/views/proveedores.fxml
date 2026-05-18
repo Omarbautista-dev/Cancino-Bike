@@ -39,6 +39,7 @@
                     styleClass="menu-button"/>
 
             <Button text="Datos proveedores"
+                    onAction="#mostrarDatosProveedores"
                     styleClass="menu-button"/>
 
             <Button text="Historial compras"
@@ -106,6 +107,43 @@
                              text="Dirección"
                              prefWidth="260"/>
 
+            </columns>
+
+        </TableView>
+
+        <TableView fx:id="tablaHistorialCompras"
+                   VBox.vgrow="ALWAYS"
+                   visible="false"
+                   managed="false">
+
+            <columns>
+                <TableColumn fx:id="colHIdCompra"
+                             text="ID compra"
+                             prefWidth="90"/>
+
+                <TableColumn fx:id="colHFecha"
+                             text="Fecha"
+                             prefWidth="160"/>
+
+                <TableColumn fx:id="colHProducto"
+                             text="Producto"
+                             prefWidth="260"/>
+
+                <TableColumn fx:id="colHCantidad"
+                             text="Cantidad"
+                             prefWidth="100"/>
+
+                <TableColumn fx:id="colHPrecio"
+                             text="Precio compra"
+                             prefWidth="130"/>
+
+                <TableColumn fx:id="colHSubtotal"
+                             text="Subtotal"
+                             prefWidth="130"/>
+
+                <TableColumn fx:id="colHTotal"
+                             text="Total compra"
+                             prefWidth="140"/>
             </columns>
 
         </TableView>
