@@ -76,6 +76,82 @@
 
             </VBox>
 
+            <VBox fx:id="panelUsuarios"
+                  spacing="10"
+                  visible="false"
+                  managed="false"
+                  styleClass="password-panel"
+                  VBox.vgrow="ALWAYS">
+
+                <Label text="USUARIOS" styleClass="form-title"/>
+
+                <HBox spacing="8">
+                    <Label text="Buscar:" styleClass="form-label"/>
+
+                    <TextField fx:id="txtBuscarUsuario"
+                               promptText="Usuario, nombre o rol"
+                               prefWidth="320"/>
+                </HBox>
+
+                <TableView fx:id="tablaUsuarios"
+                           prefHeight="300"
+                           VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colUsuarioId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colUsuarioLogin" text="Usuario" prefWidth="150"/>
+                        <TableColumn fx:id="colUsuarioNombre" text="Nombre completo" prefWidth="250"/>
+                        <TableColumn fx:id="colUsuarioRol" text="Rol" prefWidth="150"/>
+                        <TableColumn fx:id="colUsuarioEstado" text="Estado" prefWidth="100"/>
+                        <TableColumn fx:id="colUsuarioFecha" text="Fecha registro" prefWidth="180"/>
+                    </columns>
+                </TableView>
+
+                <VBox spacing="8">
+                    <Label text="DATOS DEL USUARIO" styleClass="form-title"/>
+
+                    <HBox spacing="8">
+                        <TextField fx:id="txtUsuarioNuevo"
+                                   promptText="Usuario"
+                                   prefWidth="170"/>
+
+                        <PasswordField fx:id="txtPasswordUsuario"
+                                       promptText="Password inicial"
+                                       prefWidth="170"/>
+
+                        <TextField fx:id="txtNombreCompletoUsuario"
+                                   promptText="Nombre completo"
+                                   prefWidth="260"/>
+
+                        <ComboBox fx:id="cbRolUsuario"
+                                  promptText="Rol"
+                                  prefWidth="160"/>
+
+                        <ComboBox fx:id="cbEstadoUsuario"
+                                  promptText="Estado"
+                                  prefWidth="120"/>
+                    </HBox>
+
+                    <HBox spacing="8">
+                        <Button text="Nuevo"
+                                onAction="#limpiarUsuario"
+                                styleClass="menu-button"/>
+
+                        <Button text="Guardar usuario"
+                                onAction="#guardarUsuario"
+                                styleClass="menu-button"/>
+
+                        <Button text="Actualizar usuario"
+                                onAction="#actualizarUsuario"
+                                styleClass="menu-button"/>
+
+                        <Button text="Activar/Desactivar"
+                                onAction="#cambiarEstadoUsuario"
+                                styleClass="menu-button"/>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+
         </VBox>
 
     </VBox>

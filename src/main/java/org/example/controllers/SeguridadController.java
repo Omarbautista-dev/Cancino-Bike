@@ -7,9 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
+import javafx.scene.layout.VBox;
 import org.example.models.SeguridadModel;
-
+import javafx.collections.FXCollections;
+import javafx.scene.control.cell.PropertyValueFactory;
+import org.example.models.Usuario;
+import org.example.models.RolItem;
+import org.example.models.UsuarioSeguridadModel;
 import java.util.Objects;
 
 public class SeguridadController {
@@ -21,11 +25,36 @@ public class SeguridadController {
     @FXML private PasswordField txtPasswordNuevo;
     @FXML private PasswordField txtPasswordConfirmar;
 
+    @FXML private VBox panelCambiarPassword;
+    @FXML private VBox panelUsuarios;
+
+    @FXML private TextField txtBuscarUsuario;
+    @FXML private TextField txtUsuarioNuevo;
+    @FXML private PasswordField txtPasswordUsuario;
+    @FXML private TextField txtNombreCompletoUsuario;
+
+    @FXML private ComboBox<RolItem> cbRolUsuario;
+    @FXML private ComboBox<String> cbEstadoUsuario;
+
+    @FXML private TableView<Usuario> tablaUsuarios;
+
+    @FXML private TableColumn<Usuario, Integer> colUsuarioId;
+    @FXML private TableColumn<Usuario, String> colUsuarioLogin;
+    @FXML private TableColumn<Usuario, String> colUsuarioNombre;
+    @FXML private TableColumn<Usuario, String> colUsuarioRol;
+    @FXML private TableColumn<Usuario, Integer> colUsuarioEstado;
+    @FXML private TableColumn<Usuario, String> colUsuarioFecha;
     private final SeguridadModel seguridadModel = new SeguridadModel();
 
     @FXML
     public void initialize() {
         cargarLogo();
+        configurarTablaUsuarios();
+        cargarRoles();
+        cargarEstados();
+        cargarUsuarios();
+        configurarBusquedaUsuarios();
+        detectarSeleccionUsuario();
     }
 
     private void cargarLogo() {
@@ -85,6 +114,80 @@ public class SeguridadController {
         }
     }
 
+    private final UsuarioSeguridadModel usuarioModel = new UsuarioSeguridadModel();
+
+    private void configurarTablaUsuarios() {
+        colUsuarioId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
+        colUsuarioLogin.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        colUsuarioNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
+        colUsuarioRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+        colUsuarioEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        colUsuarioFecha.setCellValueFactory(new PropertyValueFactory<>("fechaRegistro"));
+    }
+
+    private void cargarUsuarios() {
+        tablaUsuarios.setItems(
+                FXCollections.observableArrayList(
+                        usuarioModel.listarUsuarios()
+                )
+        );
+    }
+
+    private void cargarRoles() {
+        cbRolUsuario.setItems(
+                FXCollections.observableArrayList(
+                        usuarioModel.listarRoles()
+                )
+        );
+    }
+
+    private void cargarEstados() {
+        cbEstadoUsuario.setItems(
+                FXCollections.observableArrayList("Activo", "Inactivo")
+        );
+    }
+
+    private Usuario usuarioSeleccionado;
+
+    private void configurarBusquedaUsuarios() {
+        txtBuscarUsuario.textProperty().addListener((obs, oldValue, newValue) -> {
+            tablaUsuarios.setItems(
+                    FXCollections.observableArrayList(
+                            usuarioModel.buscarUsuarios(newValue)
+                    )
+            );
+        });
+    }
+
+    private void detectarSeleccionUsuario() {
+        tablaUsuarios.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, usuario) -> {
+                    if (usuario != null) {
+                        usuarioSeleccionado = usuario;
+
+                        txtUsuarioNuevo.setText(usuario.getUsuario());
+                        txtNombreCompletoUsuario.setText(usuario.getNombreCompleto());
+                        txtPasswordUsuario.clear();
+
+                        seleccionarRol(usuario.getIdRol());
+
+                        cbEstadoUsuario.setValue(
+                                usuario.getEstado() == 1 ? "Activo" : "Inactivo"
+                        );
+                    }
+                }
+        );
+    }
+
+    private void seleccionarRol(int idRol) {
+        for (RolItem rol : cbRolUsuario.getItems()) {
+            if (rol.getIdRol() == idRol) {
+                cbRolUsuario.setValue(rol);
+                break;
+            }
+        }
+    }
+
     @FXML
     private void limpiarFormulario() {
         txtUsuario.clear();
@@ -95,12 +198,22 @@ public class SeguridadController {
 
     @FXML
     private void mostrarCambiarPassword() {
-        mostrarMensaje("Estás en Cambio de Password.");
+        panelUsuarios.setVisible(false);
+        panelUsuarios.setManaged(false);
+
+        panelCambiarPassword.setVisible(true);
+        panelCambiarPassword.setManaged(true);
     }
 
     @FXML
     private void mostrarUsuarios() {
-        mostrarMensaje("Usuarios en construcción.");
+        panelCambiarPassword.setVisible(false);
+        panelCambiarPassword.setManaged(false);
+
+        panelUsuarios.setVisible(true);
+        panelUsuarios.setManaged(true);
+
+        cargarUsuarios();
     }
 
     @FXML
@@ -120,6 +233,116 @@ public class SeguridadController {
                 "dashboard.css",
                 "SIG-CB - Dashboard"
         );
+    }
+    @FXML
+    private void limpiarUsuario() {
+        usuarioSeleccionado = null;
+
+        txtUsuarioNuevo.clear();
+        txtPasswordUsuario.clear();
+        txtNombreCompletoUsuario.clear();
+
+        cbRolUsuario.getSelectionModel().clearSelection();
+        cbEstadoUsuario.setValue("Activo");
+
+        tablaUsuarios.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void guardarUsuario() {
+        String usuario = txtUsuarioNuevo.getText().trim();
+        String password = txtPasswordUsuario.getText().trim();
+        String nombre = txtNombreCompletoUsuario.getText().trim();
+        RolItem rol = cbRolUsuario.getValue();
+
+        if (usuario.isEmpty() || password.isEmpty() || nombre.isEmpty() || rol == null) {
+            mostrarMensaje("Completa usuario, password, nombre y rol.");
+            return;
+        }
+
+        if (usuarioModel.existeUsuario(usuario)) {
+            mostrarMensaje("Ya existe un usuario con ese nombre.");
+            return;
+        }
+
+        boolean ok = usuarioModel.insertarUsuario(
+                usuario,
+                password,
+                nombre,
+                rol.getIdRol()
+        );
+
+        if (ok) {
+            mostrarMensaje("Usuario guardado correctamente.");
+            cargarUsuarios();
+            limpiarUsuario();
+        } else {
+            mostrarMensaje("No se pudo guardar el usuario.");
+        }
+    }
+
+    @FXML
+    private void actualizarUsuario() {
+        if (usuarioSeleccionado == null) {
+            mostrarMensaje("Selecciona un usuario.");
+            return;
+        }
+
+        String usuario = txtUsuarioNuevo.getText().trim();
+        String nombre = txtNombreCompletoUsuario.getText().trim();
+        RolItem rol = cbRolUsuario.getValue();
+        String estadoTexto = cbEstadoUsuario.getValue();
+
+        if (usuario.isEmpty() || nombre.isEmpty() || rol == null || estadoTexto == null) {
+            mostrarMensaje("Completa usuario, nombre, rol y estado.");
+            return;
+        }
+
+        int estado = estadoTexto.equals("Activo") ? 1 : 0;
+
+        boolean ok = usuarioModel.actualizarUsuario(
+                usuarioSeleccionado.getIdUsuario(),
+                usuario,
+                nombre,
+                rol.getIdRol(),
+                estado
+        );
+
+        if (ok) {
+            mostrarMensaje("Usuario actualizado correctamente.");
+            cargarUsuarios();
+            limpiarUsuario();
+        } else {
+            mostrarMensaje("No se pudo actualizar el usuario.");
+        }
+    }
+
+    @FXML
+    private void cambiarEstadoUsuario() {
+        if (usuarioSeleccionado == null) {
+            mostrarMensaje("Selecciona un usuario.");
+            return;
+        }
+
+        int nuevoEstado = usuarioSeleccionado.getEstado() == 1 ? 0 : 1;
+
+        boolean ok = usuarioModel.cambiarEstadoUsuario(
+                usuarioSeleccionado.getIdUsuario(),
+                nuevoEstado
+        );
+
+        if (ok) {
+            mostrarMensaje(
+                    nuevoEstado == 1
+                            ? "Usuario activado correctamente."
+                            : "Usuario desactivado correctamente."
+            );
+
+            cargarUsuarios();
+            limpiarUsuario();
+        } else {
+            mostrarMensaje("No se pudo cambiar el estado del usuario.");
+        }
     }
 
     private void cambiarVentana(String fxml, String cssModulo, String titulo) {
