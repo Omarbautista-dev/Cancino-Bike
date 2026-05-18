@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.SeguridadController"
+            prefWidth="1100"
+            prefHeight="780"
+            styleClass="root-dashboard">
+
+    <VBox AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          styleClass="main-box">
+
+        <HBox styleClass="header">
+            <ImageView fx:id="logoImage"
+                       fitWidth="58"
+                       fitHeight="58"
+                       preserveRatio="true"/>
+
+            <VBox styleClass="title-box">
+                <Label text="Refaccionaria" styleClass="title"/>
+                <Label text="Cancino Bike" styleClass="title"/>
+            </VBox>
+        </HBox>
+
+        <HBox styleClass="menu-bar">
+            <Button text="Dashboard" onAction="#abrirDashboard" styleClass="menu-button"/>
+            <Button text="Cambiar Password" onAction="#mostrarCambiarPassword" styleClass="menu-button"/>
+            <Button text="Usuarios" onAction="#mostrarUsuarios" styleClass="menu-button"/>
+            <Button text="Privilegios" onAction="#mostrarPrivilegios" styleClass="menu-button"/>
+            <Button text="Accesos" onAction="#mostrarAccesos" styleClass="menu-button"/>
+        </HBox>
+
+        <VBox VBox.vgrow="ALWAYS" styleClass="content">
+
+            <HBox styleClass="module-title-bar">
+                <Label text="SEGURIDAD" styleClass="module-title"/>
+            </HBox>
+
+            <VBox fx:id="panelCambiarPassword"
+                  spacing="12"
+                  styleClass="password-panel">
+
+                <Label text="CAMBIAR PASSWORD" styleClass="form-title"/>
+
+                <TextField fx:id="txtUsuario"
+                           promptText="Usuario"
+                           prefWidth="300"/>
+
+                <PasswordField fx:id="txtPasswordActual"
+                               promptText="Password actual"
+                               prefWidth="300"/>
+
+                <PasswordField fx:id="txtPasswordNuevo"
+                               promptText="Nuevo password"
+                               prefWidth="300"/>
+
+                <PasswordField fx:id="txtPasswordConfirmar"
+                               promptText="Confirmar nuevo password"
+                               prefWidth="300"/>
+
+                <HBox spacing="10">
+                    <Button text="Cambiar password"
+                            onAction="#cambiarPassword"
+                            styleClass="menu-button"/>
+
+                    <Button text="Limpiar"
+                            onAction="#limpiarFormulario"
+                            styleClass="menu-button"/>
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>
