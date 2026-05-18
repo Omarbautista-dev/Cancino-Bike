@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.sql.Statement;
 public class ProveedorModel {
 
     // =========================
@@ -281,4 +281,71 @@ public class ProveedorModel {
 
         return lista;
     }
+
+    public boolean guardarOrdenCompra(int idProveedor, int idUsuario,
+                                      List<OrdenCompraItem> items,
+                                      double totalEstimado) {
+
+        String sqlOrden = """
+        INSERT INTO ordenes_compra
+        (id_proveedor, id_usuario, total_estimado)
+        VALUES (?, ?, ?)
+        """;
+
+        String sqlDetalle = """
+        INSERT INTO detalle_orden_compra
+        (id_orden, id_producto, cantidad, precio_estimado, subtotal)
+        VALUES (?, ?, ?, ?, ?)
+        """;
+
+        try (Connection con = ConexionBD.conectar()) {
+
+            con.setAutoCommit(false);
+
+            try (PreparedStatement psOrden =
+                         con.prepareStatement(sqlOrden, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+
+                psOrden.setInt(1, idProveedor);
+                psOrden.setInt(2, idUsuario);
+                psOrden.setDouble(3, totalEstimado);
+                psOrden.executeUpdate();
+
+                ResultSet keys = psOrden.getGeneratedKeys();
+
+                if (!keys.next()) {
+                    con.rollback();
+                    return false;
+                }
+
+                int idOrden = keys.getInt(1);
+
+                try (PreparedStatement psDetalle = con.prepareStatement(sqlDetalle)) {
+
+                    for (OrdenCompraItem item : items) {
+                        psDetalle.setInt(1, idOrden);
+                        psDetalle.setInt(2, item.getIdProducto());
+                        psDetalle.setInt(3, item.getCantidad());
+                        psDetalle.setDouble(4, item.getPrecioEstimado());
+                        psDetalle.setDouble(5, item.getSubtotal());
+                        psDetalle.addBatch();
+                    }
+
+                    psDetalle.executeBatch();
+                }
+
+                con.commit();
+                return true;
+
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

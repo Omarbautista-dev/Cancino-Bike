@@ -33,7 +33,10 @@ public class Producto {
         this.idProveedor = idProveedor;
         this.proveedor = proveedor;
     }
-
+    @Override
+    public String toString() {
+        return nombreProducto;
+    }
     public int getIdProducto() { return idProducto; }
     public String getCodigoBarras() { return codigoBarras; }
     public String getModelo() { return modelo; }

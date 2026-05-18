@@ -12,9 +12,12 @@ import javafx.stage.Stage;
 import org.example.models.HistorialCompraProveedor;
 import org.example.models.Proveedor;
 import org.example.models.ProveedorModel;
-
+import javafx.collections.ObservableList;
+import org.example.models.Producto;
+import org.example.models.ProductoModel;
+import org.example.models.OrdenCompraItem;
 import java.util.Objects;
-
+import javafx.scene.layout.VBox;
 public class ProveedoresController {
 
     @FXML private ImageView logoImage;
@@ -48,6 +51,25 @@ public class ProveedoresController {
     @FXML private TableColumn<HistorialCompraProveedor, Double> colHSubtotal;
     @FXML private TableColumn<HistorialCompraProveedor, Double> colHTotal;
 
+    @FXML private VBox panelOrdenCompra;
+
+    @FXML private ComboBox<Producto> cbProductoOrden;
+    @FXML private TextField txtCantidadOrden;
+    @FXML private TextField txtPrecioOrden;
+    @FXML private TableView<OrdenCompraItem> tablaOrdenCompra;
+
+    @FXML private TableColumn<OrdenCompraItem, String> colOrdenProducto;
+    @FXML private TableColumn<OrdenCompraItem, Integer> colOrdenCantidad;
+    @FXML private TableColumn<OrdenCompraItem, Double> colOrdenPrecio;
+    @FXML private TableColumn<OrdenCompraItem, Double> colOrdenSubtotal;
+
+    @FXML private Label lblTotalOrden;
+
+    private final ProductoModel productoModel = new ProductoModel();
+
+    private final ObservableList<OrdenCompraItem> itemsOrden =
+            FXCollections.observableArrayList();
+
     private final ProveedorModel proveedorModel =
             new ProveedorModel();
 
@@ -61,6 +83,8 @@ public class ProveedoresController {
         cargarProveedores();
         configurarBusqueda();
         detectarSeleccionTabla();
+        configurarTablaOrdenCompra();
+        cargarProductosOrden();
     }
 
     private void cargarLogo() {
@@ -296,6 +320,34 @@ public class ProveedoresController {
         }
     }
 
+    private void configurarTablaOrdenCompra() {
+        colOrdenProducto.setCellValueFactory(
+                new PropertyValueFactory<>("producto")
+        );
+
+        colOrdenCantidad.setCellValueFactory(
+                new PropertyValueFactory<>("cantidad")
+        );
+
+        colOrdenPrecio.setCellValueFactory(
+                new PropertyValueFactory<>("precioEstimado")
+        );
+
+        colOrdenSubtotal.setCellValueFactory(
+                new PropertyValueFactory<>("subtotal")
+        );
+
+        tablaOrdenCompra.setItems(itemsOrden);
+    }
+
+    private void cargarProductosOrden() {
+        cbProductoOrden.setItems(
+                FXCollections.observableArrayList(
+                        productoModel.listarProductos()
+                )
+        );
+    }
+
     @FXML
     private void limpiarFormulario() {
 
@@ -434,6 +486,9 @@ public class ProveedoresController {
             return;
         }
 
+        panelOrdenCompra.setVisible(false);
+        panelOrdenCompra.setManaged(false);
+
         tablaProveedores.setVisible(false);
         tablaProveedores.setManaged(false);
 
@@ -447,13 +502,13 @@ public class ProveedoresController {
                         )
                 )
         );
-
-        mostrarMensaje("Mostrando historial de compras de: " +
-                proveedorSeleccionado.getNombreEmpresa());
     }
 
     @FXML
     private void mostrarDatosProveedores() {
+
+        panelOrdenCompra.setVisible(false);
+        panelOrdenCompra.setManaged(false);
 
         tablaHistorialCompras.setVisible(false);
         tablaHistorialCompras.setManaged(false);
@@ -466,6 +521,132 @@ public class ProveedoresController {
 
     @FXML
     private void mostrarOrdenCompra() {
-        mostrarMensaje("Orden de compra en construcción.");
+
+        if (proveedorSeleccionado == null) {
+            mostrarMensaje("Selecciona un proveedor para crear la orden de compra.");
+            return;
+        }
+
+        tablaProveedores.setVisible(false);
+        tablaProveedores.setManaged(false);
+
+        tablaHistorialCompras.setVisible(false);
+        tablaHistorialCompras.setManaged(false);
+
+        panelOrdenCompra.setVisible(true);
+        panelOrdenCompra.setManaged(true);
+
+        mostrarMensaje("Orden de compra para: " + proveedorSeleccionado.getNombreEmpresa());
+    }
+
+    @FXML
+    private void agregarProductoOrden() {
+
+        Producto producto = cbProductoOrden.getValue();
+
+        if (producto == null) {
+            mostrarMensaje("Selecciona un producto.");
+            return;
+        }
+
+        int cantidad;
+        double precio;
+
+        try {
+            cantidad = Integer.parseInt(txtCantidadOrden.getText().trim());
+            precio = Double.parseDouble(txtPrecioOrden.getText().trim());
+        } catch (NumberFormatException e) {
+            mostrarMensaje("Cantidad y precio deben ser numéricos.");
+            return;
+        }
+
+        if (cantidad <= 0) {
+            mostrarMensaje("La cantidad debe ser mayor a cero.");
+            return;
+        }
+
+        if (precio <= 0) {
+            mostrarMensaje("El precio debe ser mayor a cero.");
+            return;
+        }
+
+        itemsOrden.add(new OrdenCompraItem(
+                producto.getIdProducto(),
+                producto.getNombreProducto(),
+                cantidad,
+                precio
+        ));
+
+        txtCantidadOrden.clear();
+        txtPrecioOrden.clear();
+        cbProductoOrden.getSelectionModel().clearSelection();
+
+        actualizarTotalOrden();
+    }
+
+    @FXML
+    private void quitarProductoOrden() {
+        OrdenCompraItem item =
+                tablaOrdenCompra.getSelectionModel().getSelectedItem();
+
+        if (item == null) {
+            mostrarMensaje("Selecciona un producto de la orden.");
+            return;
+        }
+
+        itemsOrden.remove(item);
+        actualizarTotalOrden();
+    }
+
+    @FXML
+    private void limpiarOrdenCompra() {
+        itemsOrden.clear();
+        txtCantidadOrden.clear();
+        txtPrecioOrden.clear();
+        cbProductoOrden.getSelectionModel().clearSelection();
+        actualizarTotalOrden();
+    }
+
+    @FXML
+    private void guardarOrdenCompra() {
+
+        if (proveedorSeleccionado == null) {
+            mostrarMensaje("Selecciona un proveedor.");
+            return;
+        }
+
+        if (itemsOrden.isEmpty()) {
+            mostrarMensaje("Agrega productos a la orden.");
+            return;
+        }
+
+        double total = obtenerTotalOrden();
+
+        boolean ok = proveedorModel.guardarOrdenCompra(
+                proveedorSeleccionado.getIdProveedor(),
+                1,
+                itemsOrden,
+                total
+        );
+
+        if (ok) {
+            mostrarMensaje("Orden de compra guardada correctamente.");
+            limpiarOrdenCompra();
+            cargarProductosOrden();
+        } else {
+            mostrarMensaje("No se pudo guardar la orden.");
+        }
+    }
+
+    private double obtenerTotalOrden() {
+        return itemsOrden.stream()
+                .mapToDouble(OrdenCompraItem::getSubtotal)
+                .sum();
+    }
+
+    private void actualizarTotalOrden() {
+        lblTotalOrden.setText(
+                String.format("Total estimado: $%.2f", obtenerTotalOrden())
+        );
     }
 }

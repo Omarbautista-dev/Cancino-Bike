@@ -148,6 +148,75 @@
 
         </TableView>
 
+        <VBox fx:id="panelOrdenCompra"
+              spacing="10"
+              visible="false"
+              managed="false"
+              VBox.vgrow="ALWAYS"
+              styleClass="form-box">
+
+            <Label text="ORDEN DE COMPRA" styleClass="module-title"/>
+
+            <HBox spacing="10">
+                <ComboBox fx:id="cbProductoOrden"
+                          promptText="Producto"
+                          prefWidth="300"/>
+
+                <TextField fx:id="txtCantidadOrden"
+                           promptText="Cantidad"
+                           prefWidth="120"/>
+
+                <TextField fx:id="txtPrecioOrden"
+                           promptText="Precio estimado"
+                           prefWidth="150"/>
+
+                <Button text="Agregar"
+                        onAction="#agregarProductoOrden"
+                        styleClass="menu-button"/>
+            </HBox>
+
+            <TableView fx:id="tablaOrdenCompra"
+                       VBox.vgrow="ALWAYS">
+
+                <columns>
+                    <TableColumn fx:id="colOrdenProducto"
+                                 text="Producto"
+                                 prefWidth="350"/>
+
+                    <TableColumn fx:id="colOrdenCantidad"
+                                 text="Cantidad"
+                                 prefWidth="120"/>
+
+                    <TableColumn fx:id="colOrdenPrecio"
+                                 text="Precio estimado"
+                                 prefWidth="150"/>
+
+                    <TableColumn fx:id="colOrdenSubtotal"
+                                 text="Subtotal"
+                                 prefWidth="150"/>
+                </columns>
+            </TableView>
+
+            <Label fx:id="lblTotalOrden"
+                   text="Total estimado: $0.00"
+                   styleClass="module-title"/>
+
+            <HBox spacing="10">
+                <Button text="Guardar orden"
+                        onAction="#guardarOrdenCompra"
+                        styleClass="menu-button"/>
+
+                <Button text="Quitar producto"
+                        onAction="#quitarProductoOrden"
+                        styleClass="menu-button"/>
+
+                <Button text="Limpiar orden"
+                        onAction="#limpiarOrdenCompra"
+                        styleClass="menu-button"/>
+            </HBox>
+
+        </VBox>
+
         <!-- FORMULARIO -->
         <VBox spacing="10"
               styleClass="form-box">
