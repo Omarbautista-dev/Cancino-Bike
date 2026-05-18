@@ -16,6 +16,7 @@
           AnchorPane.bottomAnchor="10"
           styleClass="main-box">
 
+        <!-- HEADER -->
         <HBox styleClass="header">
 
             <ImageView fx:id="logoImage"
@@ -30,125 +31,143 @@
 
         </HBox>
 
+        <!-- MENU PRINCIPAL DEL MODULO -->
         <HBox styleClass="menu-bar">
 
             <Button text="Dashboard"
                     onAction="#abrirDashboard"
                     styleClass="menu-button"/>
 
-            <Button text="Nuevo"
-                    onAction="#limpiarFormulario"
+            <Button text="Datos proveedores"
                     styleClass="menu-button"/>
 
-            <Button text="Guardar"
-                    onAction="#guardarProveedor"
+            <Button text="Historial compras"
+                    onAction="#mostrarHistorialCompras"
                     styleClass="menu-button"/>
 
-            <Button text="Actualizar"
-                    onAction="#actualizarProveedor"
-                    styleClass="menu-button"/>
-
-            <Button text="Eliminar"
-                    onAction="#eliminarProveedor"
+            <Button text="Orden compra"
+                    onAction="#mostrarOrdenCompra"
                     styleClass="menu-button"/>
 
         </HBox>
 
-        <VBox VBox.vgrow="ALWAYS"
-              styleClass="content">
+        <!-- TITULO -->
+        <HBox styleClass="module-title-bar">
 
-            <HBox styleClass="module-title-bar">
-                <Label text="PROVEEDORES"
-                       styleClass="module-title"/>
+            <Label text="PROVEEDORES"
+                   styleClass="module-title"/>
+
+        </HBox>
+
+        <!-- BUSQUEDA -->
+        <HBox spacing="10"
+              styleClass="search-bar">
+
+            <Label text="Buscar:"
+                   styleClass="form-label"/>
+
+            <TextField fx:id="txtBuscar"
+                       promptText="Empresa, contacto, teléfono o RFC"
+                       prefWidth="350"/>
+
+        </HBox>
+
+        <!-- TABLA -->
+        <TableView fx:id="tablaProveedores"
+                   VBox.vgrow="ALWAYS">
+
+            <columns>
+
+                <TableColumn fx:id="colId"
+                             text="ID"
+                             prefWidth="60"/>
+
+                <TableColumn fx:id="colEmpresa"
+                             text="Empresa"
+                             prefWidth="220"/>
+
+                <TableColumn fx:id="colContacto"
+                             text="Contacto"
+                             prefWidth="180"/>
+
+                <TableColumn fx:id="colTelefono"
+                             text="Teléfono"
+                             prefWidth="140"/>
+
+                <TableColumn fx:id="colEmail"
+                             text="Email"
+                             prefWidth="220"/>
+
+                <TableColumn fx:id="colRfc"
+                             text="RFC"
+                             prefWidth="140"/>
+
+                <TableColumn fx:id="colDireccion"
+                             text="Dirección"
+                             prefWidth="260"/>
+
+            </columns>
+
+        </TableView>
+
+        <!-- FORMULARIO -->
+        <VBox spacing="10"
+              styleClass="form-box">
+
+            <Label text="DATOS DEL PROVEEDOR"
+                   styleClass="module-title"/>
+
+            <HBox spacing="10">
+
+                <TextField fx:id="txtEmpresa"
+                           promptText="Nombre empresa"
+                           prefWidth="260"/>
+
+                <TextField fx:id="txtContacto"
+                           promptText="Contacto"
+                           prefWidth="220"/>
+
+                <TextField fx:id="txtTelefono"
+                           promptText="Teléfono"
+                           prefWidth="160"/>
+
             </HBox>
 
-            <HBox spacing="10"
-                  styleClass="search-bar">
+            <HBox spacing="10">
 
-                <Label text="Buscar:"
-                       styleClass="form-label"/>
+                <TextField fx:id="txtEmail"
+                           promptText="Email"
+                           prefWidth="300"/>
 
-                <TextField fx:id="txtBuscar"
-                           promptText="Empresa, contacto, teléfono o RFC"
-                           prefWidth="350"/>
+                <TextField fx:id="txtRfc"
+                           promptText="RFC"
+                           prefWidth="180"/>
 
             </HBox>
 
-            <TableView fx:id="tablaProveedores"
-                       VBox.vgrow="ALWAYS">
+            <TextField fx:id="txtDireccion"
+                       promptText="Dirección"/>
 
-                <columns>
+            <!-- CRUD ABAJO -->
+            <HBox spacing="10">
 
-                    <TableColumn fx:id="colId"
-                                 text="ID"
-                                 prefWidth="60"/>
+                <Button text="Nuevo"
+                        onAction="#limpiarFormulario"
+                        styleClass="menu-button"/>
 
-                    <TableColumn fx:id="colEmpresa"
-                                 text="Empresa"
-                                 prefWidth="220"/>
+                <Button text="Guardar"
+                        onAction="#guardarProveedor"
+                        styleClass="menu-button"/>
 
-                    <TableColumn fx:id="colContacto"
-                                 text="Contacto"
-                                 prefWidth="180"/>
+                <Button text="Actualizar"
+                        onAction="#actualizarProveedor"
+                        styleClass="menu-button"/>
 
-                    <TableColumn fx:id="colTelefono"
-                                 text="Teléfono"
-                                 prefWidth="140"/>
+                <Button text="Eliminar"
+                        onAction="#eliminarProveedor"
+                        styleClass="menu-button"/>
 
-                    <TableColumn fx:id="colEmail"
-                                 text="Email"
-                                 prefWidth="220"/>
-
-                    <TableColumn fx:id="colRfc"
-                                 text="RFC"
-                                 prefWidth="140"/>
-
-                    <TableColumn fx:id="colDireccion"
-                                 text="Dirección"
-                                 prefWidth="250"/>
-
-                </columns>
-
-            </TableView>
-
-            <VBox spacing="10"
-                  styleClass="form-box">
-
-                <Label text="DATOS DEL PROVEEDOR"
-                       styleClass="module-title"/>
-
-                <HBox spacing="10">
-
-                    <TextField fx:id="txtEmpresa"
-                               promptText="Nombre empresa"
-                               prefWidth="250"/>
-
-                    <TextField fx:id="txtContacto"
-                               promptText="Contacto"
-                               prefWidth="200"/>
-
-                    <TextField fx:id="txtTelefono"
-                               promptText="Teléfono"
-                               prefWidth="150"/>
-
-                </HBox>
-
-                <HBox spacing="10">
-
-                    <TextField fx:id="txtEmail"
-                               promptText="Email"
-                               prefWidth="260"/>
-
-                    <TextField fx:id="txtRfc"
-                               promptText="RFC"
-                               prefWidth="180"/>
-
-                </HBox>
-
-                <TextField fx:id="txtDireccion"
-                           promptText="Dirección"/>
-
-            </VBox>
+            </HBox>
 
         </VBox>
 

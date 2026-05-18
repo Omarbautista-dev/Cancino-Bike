@@ -388,4 +388,14 @@ public class ProveedoresController {
 
         alert.showAndWait();
     }
+
+    @FXML
+    private void mostrarHistorialCompras() {
+        mostrarMensaje("Historial de compras en construcción.");
+    }
+
+    @FXML
+    private void mostrarOrdenCompra() {
+        mostrarMensaje("Orden de compra en construcción.");
+    }
 }
