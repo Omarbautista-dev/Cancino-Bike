@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -16,6 +18,7 @@
            fx:controller="org.example.controllers.LoginController">
 
     <children>
+
         <VBox alignment="TOP_CENTER"
               prefWidth="585.0"
               prefHeight="505.0"
@@ -25,18 +28,36 @@
               styleClass="login-card">
 
             <padding>
-                <Insets top="65" right="40" bottom="40" left="40"/>
+                <Insets top="25" right="40" bottom="40" left="40"/>
             </padding>
 
             <children>
-                <Label text="Cancino Bike" styleClass="titulo"/>
 
+                <!-- LOGO -->
+                <ImageView fitHeight="80"
+                           fitWidth="80"
+                           preserveRatio="true">
+
+                    <image>
+                        <Image url="@../img/logo.jpeg"/>
+                    </image>
+
+                </ImageView>
+
+                <!-- TITULO -->
+                <Label text="Cancino Bike"
+                       styleClass="titulo"/>
+
+                <!-- SUBTITULO -->
                 <Label text="Innovación, calidad y confianza en cada pieza"
                        styleClass="subtitulo"/>
 
                 <Label prefHeight="28"/>
 
-                <Label text="Usuario" maxWidth="999" styleClass="label-form"/>
+                <!-- USUARIO -->
+                <Label text="Usuario"
+                       maxWidth="999"
+                       styleClass="label-form"/>
 
                 <TextField fx:id="txtUsuario"
                            prefHeight="56"
@@ -46,7 +67,10 @@
 
                 <Label prefHeight="26"/>
 
-                <Label text="Contraseña" maxWidth="999" styleClass="label-form"/>
+                <!-- PASSWORD -->
+                <Label text="Contraseña"
+                       maxWidth="999"
+                       styleClass="label-form"/>
 
                 <PasswordField fx:id="txtPassword"
                                prefHeight="56"
@@ -56,12 +80,17 @@
 
                 <Label prefHeight="74"/>
 
+                <!-- BOTON -->
                 <Button text="Iniciar Sesion"
                         onAction="#iniciarSesion"
                         prefHeight="42"
                         maxWidth="999"
                         styleClass="btn-login"/>
+
             </children>
+
         </VBox>
+
     </children>
+
 </StackPane>
