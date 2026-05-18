@@ -22,6 +22,7 @@ public class LoginController {
 
     @FXML
     private void iniciarSesion() {
+
         String usuario = txtUsuario.getText().trim();
         String password = txtPassword.getText().trim();
 
@@ -32,10 +33,27 @@ public class LoginController {
 
         boolean acceso = usuarioModel.validarLogin(usuario, password);
 
+        int idUsuario = usuarioModel.obtenerIdUsuario(usuario);
+
         if (acceso) {
+
+            if (idUsuario > 0) {
+                usuarioModel.registrarAcceso(idUsuario, "CORRECTO");
+            }
+
             abrirDashboard();
+
         } else {
-            mostrarAlerta("Acceso denegado", "Usuario o contraseña incorrectos.");
+
+            if (idUsuario > 0) {
+                usuarioModel.registrarAcceso(idUsuario, "FALLIDO");
+            }
+
+            mostrarAlerta(
+                    "Acceso denegado",
+                    "Usuario o contraseña incorrectos."
+            );
+
             txtPassword.clear();
         }
     }

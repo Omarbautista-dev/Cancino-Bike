@@ -31,4 +31,47 @@ public class UsuarioModel {
             return false;
         }
     }
+    public int obtenerIdUsuario(String usuario) {
+        String sql = """
+        SELECT id_usuario
+        FROM usuarios
+        WHERE usuario = ?
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, usuario);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id_usuario");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public void registrarAcceso(int idUsuario, String estado) {
+        String sql = """
+        INSERT INTO accesos
+        (id_usuario, estado_acceso)
+        VALUES (?, ?)
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+            ps.setString(2, estado);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

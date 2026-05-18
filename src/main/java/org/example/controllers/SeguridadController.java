@@ -15,7 +15,9 @@ import org.example.models.Usuario;
 import org.example.models.RolItem;
 import org.example.models.UsuarioSeguridadModel;
 import java.util.Objects;
-
+import javafx.collections.FXCollections;
+import javafx.scene.control.cell.PropertyValueFactory;
+import org.example.models.Acceso;
 public class SeguridadController {
 
     @FXML private ImageView logoImage;
@@ -44,6 +46,18 @@ public class SeguridadController {
     @FXML private TableColumn<Usuario, String> colUsuarioRol;
     @FXML private TableColumn<Usuario, Integer> colUsuarioEstado;
     @FXML private TableColumn<Usuario, String> colUsuarioFecha;
+    @FXML private VBox panelAccesos;
+
+    @FXML private TextField txtBuscarAcceso;
+
+    @FXML private TableView<Acceso> tablaAccesos;
+
+    @FXML private TableColumn<Acceso, Integer> colAccesoId;
+    @FXML private TableColumn<Acceso, String> colAccesoUsuario;
+    @FXML private TableColumn<Acceso, String> colAccesoNombre;
+    @FXML private TableColumn<Acceso, String> colAccesoFecha;
+    @FXML private TableColumn<Acceso, String> colAccesoEstado;
+
     private final SeguridadModel seguridadModel = new SeguridadModel();
 
     @FXML
@@ -55,6 +69,8 @@ public class SeguridadController {
         cargarUsuarios();
         configurarBusquedaUsuarios();
         detectarSeleccionUsuario();
+        configurarTablaAccesos();
+        configurarBusquedaAccesos();
     }
 
     private void cargarLogo() {
@@ -188,6 +204,33 @@ public class SeguridadController {
         }
     }
 
+    private void configurarTablaAccesos() {
+        colAccesoId.setCellValueFactory(new PropertyValueFactory<>("idAcceso"));
+        colAccesoUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        colAccesoNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
+        colAccesoFecha.setCellValueFactory(new PropertyValueFactory<>("fechaAcceso"));
+        colAccesoEstado.setCellValueFactory(new PropertyValueFactory<>("estadoAcceso"));
+    }
+
+    private void cargarAccesos() {
+        tablaAccesos.setItems(
+                FXCollections.observableArrayList(
+                        usuarioModel.listarAccesos()
+                )
+        );
+    }
+
+    private void configurarBusquedaAccesos() {
+        txtBuscarAcceso.textProperty().addListener((obs, oldValue, newValue) -> {
+            tablaAccesos.setItems(
+                    FXCollections.observableArrayList(
+                            usuarioModel.buscarAccesos(newValue)
+                    )
+            );
+        });
+    }
+
+
     @FXML
     private void limpiarFormulario() {
         txtUsuario.clear();
@@ -201,6 +244,9 @@ public class SeguridadController {
         panelUsuarios.setVisible(false);
         panelUsuarios.setManaged(false);
 
+        panelAccesos.setVisible(false);
+        panelAccesos.setManaged(false);
+
         panelCambiarPassword.setVisible(true);
         panelCambiarPassword.setManaged(true);
     }
@@ -209,6 +255,9 @@ public class SeguridadController {
     private void mostrarUsuarios() {
         panelCambiarPassword.setVisible(false);
         panelCambiarPassword.setManaged(false);
+
+        panelAccesos.setVisible(false);
+        panelAccesos.setManaged(false);
 
         panelUsuarios.setVisible(true);
         panelUsuarios.setManaged(true);
@@ -223,7 +272,16 @@ public class SeguridadController {
 
     @FXML
     private void mostrarAccesos() {
-        mostrarMensaje("Accesos en construcción.");
+        panelCambiarPassword.setVisible(false);
+        panelCambiarPassword.setManaged(false);
+
+        panelUsuarios.setVisible(false);
+        panelUsuarios.setManaged(false);
+
+        panelAccesos.setVisible(true);
+        panelAccesos.setManaged(true);
+
+        cargarAccesos();
     }
 
     @FXML

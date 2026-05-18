@@ -232,4 +232,85 @@ public class UsuarioSeguridadModel {
 
         return false;
     }
+    public List<Acceso> listarAccesos() {
+        List<Acceso> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            a.id_acceso,
+            u.usuario,
+            u.nombre_completo,
+            DATE_FORMAT(a.fecha_acceso, '%Y-%m-%d %H:%i') AS fecha_acceso,
+            a.estado_acceso
+        FROM accesos a
+        INNER JOIN usuarios u ON a.id_usuario = u.id_usuario
+        ORDER BY a.fecha_acceso DESC
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(new Acceso(
+                        rs.getInt("id_acceso"),
+                        rs.getString("usuario"),
+                        rs.getString("nombre_completo"),
+                        rs.getString("fecha_acceso"),
+                        rs.getString("estado_acceso")
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    public List<Acceso> buscarAccesos(String filtro) {
+        List<Acceso> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            a.id_acceso,
+            u.usuario,
+            u.nombre_completo,
+            DATE_FORMAT(a.fecha_acceso, '%Y-%m-%d %H:%i') AS fecha_acceso,
+            a.estado_acceso
+        FROM accesos a
+        INNER JOIN usuarios u ON a.id_usuario = u.id_usuario
+        WHERE u.usuario LIKE ?
+           OR u.nombre_completo LIKE ?
+           OR a.estado_acceso LIKE ?
+        ORDER BY a.fecha_acceso DESC
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            String busqueda = "%" + filtro + "%";
+
+            ps.setString(1, busqueda);
+            ps.setString(2, busqueda);
+            ps.setString(3, busqueda);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lista.add(new Acceso(
+                        rs.getInt("id_acceso"),
+                        rs.getString("usuario"),
+                        rs.getString("nombre_completo"),
+                        rs.getString("fecha_acceso"),
+                        rs.getString("estado_acceso")
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 }

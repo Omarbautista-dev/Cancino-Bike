@@ -152,6 +152,53 @@
 
             </VBox>
 
+            <VBox fx:id="panelAccesos"
+                  spacing="10"
+                  visible="false"
+                  managed="false"
+                  styleClass="password-panel"
+                  VBox.vgrow="ALWAYS">
+
+                <Label text="ACCESOS / HISTORIAL LOGIN" styleClass="form-title"/>
+
+                <HBox spacing="8">
+                    <Label text="Buscar:" styleClass="form-label"/>
+
+                    <TextField fx:id="txtBuscarAcceso"
+                               promptText="Usuario, nombre o estado"
+                               prefWidth="320"/>
+                </HBox>
+
+                <TableView fx:id="tablaAccesos"
+                           prefHeight="450"
+                           VBox.vgrow="ALWAYS">
+
+                    <columns>
+                        <TableColumn fx:id="colAccesoId"
+                                     text="ID"
+                                     prefWidth="70"/>
+
+                        <TableColumn fx:id="colAccesoUsuario"
+                                     text="Usuario"
+                                     prefWidth="180"/>
+
+                        <TableColumn fx:id="colAccesoNombre"
+                                     text="Nombre completo"
+                                     prefWidth="260"/>
+
+                        <TableColumn fx:id="colAccesoFecha"
+                                     text="Fecha acceso"
+                                     prefWidth="180"/>
+
+                        <TableColumn fx:id="colAccesoEstado"
+                                     text="Estado"
+                                     prefWidth="150"/>
+                    </columns>
+
+                </TableView>
+
+            </VBox>
+
         </VBox>
 
     </VBox>
