@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.ProveedoresController"
+            prefWidth="1100"
+            prefHeight="780"
+            styleClass="root-dashboard">
+
+    <VBox AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          styleClass="main-box">
+
+        <HBox styleClass="header">
+
+            <ImageView fx:id="logoImage"
+                       fitWidth="58"
+                       fitHeight="58"
+                       preserveRatio="true"/>
+
+            <VBox styleClass="title-box">
+                <Label text="Refaccionaria" styleClass="title"/>
+                <Label text="Cancino Bike" styleClass="title"/>
+            </VBox>
+
+        </HBox>
+
+        <HBox styleClass="menu-bar">
+
+            <Button text="Dashboard"
+                    onAction="#abrirDashboard"
+                    styleClass="menu-button"/>
+
+            <Button text="Nuevo"
+                    onAction="#limpiarFormulario"
+                    styleClass="menu-button"/>
+
+            <Button text="Guardar"
+                    onAction="#guardarProveedor"
+                    styleClass="menu-button"/>
+
+            <Button text="Actualizar"
+                    onAction="#actualizarProveedor"
+                    styleClass="menu-button"/>
+
+            <Button text="Eliminar"
+                    onAction="#eliminarProveedor"
+                    styleClass="menu-button"/>
+
+        </HBox>
+
+        <VBox VBox.vgrow="ALWAYS"
+              styleClass="content">
+
+            <HBox styleClass="module-title-bar">
+                <Label text="PROVEEDORES"
+                       styleClass="module-title"/>
+            </HBox>
+
+            <HBox spacing="10"
+                  styleClass="search-bar">
+
+                <Label text="Buscar:"
+                       styleClass="form-label"/>
+
+                <TextField fx:id="txtBuscar"
+                           promptText="Empresa, contacto, teléfono o RFC"
+                           prefWidth="350"/>
+
+            </HBox>
+
+            <TableView fx:id="tablaProveedores"
+                       VBox.vgrow="ALWAYS">
+
+                <columns>
+
+                    <TableColumn fx:id="colId"
+                                 text="ID"
+                                 prefWidth="60"/>
+
+                    <TableColumn fx:id="colEmpresa"
+                                 text="Empresa"
+                                 prefWidth="220"/>
+
+                    <TableColumn fx:id="colContacto"
+                                 text="Contacto"
+                                 prefWidth="180"/>
+
+                    <TableColumn fx:id="colTelefono"
+                                 text="Teléfono"
+                                 prefWidth="140"/>
+
+                    <TableColumn fx:id="colEmail"
+                                 text="Email"
+                                 prefWidth="220"/>
+
+                    <TableColumn fx:id="colRfc"
+                                 text="RFC"
+                                 prefWidth="140"/>
+
+                    <TableColumn fx:id="colDireccion"
+                                 text="Dirección"
+                                 prefWidth="250"/>
+
+                </columns>
+
+            </TableView>
+
+            <VBox spacing="10"
+                  styleClass="form-box">
+
+                <Label text="DATOS DEL PROVEEDOR"
+                       styleClass="module-title"/>
+
+                <HBox spacing="10">
+
+                    <TextField fx:id="txtEmpresa"
+                               promptText="Nombre empresa"
+                               prefWidth="250"/>
+
+                    <TextField fx:id="txtContacto"
+                               promptText="Contacto"
+                               prefWidth="200"/>
+
+                    <TextField fx:id="txtTelefono"
+                               promptText="Teléfono"
+                               prefWidth="150"/>
+
+                </HBox>
+
+                <HBox spacing="10">
+
+                    <TextField fx:id="txtEmail"
+                               promptText="Email"
+                               prefWidth="260"/>
+
+                    <TextField fx:id="txtRfc"
+                               promptText="RFC"
+                               prefWidth="180"/>
+
+                </HBox>
+
+                <TextField fx:id="txtDireccion"
+                           promptText="Dirección"/>
+
+            </VBox>
+
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>
