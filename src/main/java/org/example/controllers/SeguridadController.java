@@ -15,6 +15,7 @@ import org.example.models.Usuario;
 import org.example.models.RolItem;
 import org.example.models.UsuarioSeguridadModel;
 import java.util.Objects;
+import org.example.models.Privilegio;
 import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.models.Acceso;
@@ -58,6 +59,15 @@ public class SeguridadController {
     @FXML private TableColumn<Acceso, String> colAccesoFecha;
     @FXML private TableColumn<Acceso, String> colAccesoEstado;
 
+    @FXML private VBox panelPrivilegios;
+
+    @FXML private ComboBox<RolItem> cbRolPrivilegios;
+
+    @FXML private TableView<Privilegio> tablaPrivilegios;
+
+    @FXML private TableColumn<Privilegio, String> colPrivModulo;
+    @FXML private TableColumn<Privilegio, String> colPrivAccion;
+    @FXML private TableColumn<Privilegio, Boolean> colPrivAsignado;
     private final SeguridadModel seguridadModel = new SeguridadModel();
 
     @FXML
@@ -71,6 +81,8 @@ public class SeguridadController {
         detectarSeleccionUsuario();
         configurarTablaAccesos();
         configurarBusquedaAccesos();
+        configurarTablaPrivilegios();
+        cargarRolesPrivilegios();
     }
 
     private void cargarLogo() {
@@ -230,6 +242,111 @@ public class SeguridadController {
         });
     }
 
+    private void configurarTablaPrivilegios() {
+        colPrivModulo.setCellValueFactory(
+                new PropertyValueFactory<>("modulo")
+        );
+
+        colPrivAccion.setCellValueFactory(
+                new PropertyValueFactory<>("accion")
+        );
+
+        colPrivAsignado.setCellValueFactory(
+                new PropertyValueFactory<>("asignado")
+        );
+    }
+
+    private void cargarRolesPrivilegios() {
+        cbRolPrivilegios.setItems(
+                FXCollections.observableArrayList(
+                        usuarioModel.listarRoles()
+                )
+        );
+    }
+
+    @FXML
+    private void cargarPrivilegiosRol() {
+        RolItem rol = cbRolPrivilegios.getValue();
+
+        if (rol == null) {
+            mostrarMensaje("Selecciona un rol.");
+            return;
+        }
+
+        tablaPrivilegios.setItems(
+                FXCollections.observableArrayList(
+                        usuarioModel.listarPrivilegiosPorRol(
+                                rol.getIdRol()
+                        )
+                )
+        );
+    }
+
+    @FXML
+    private void asignarPrivilegio() {
+        RolItem rol = cbRolPrivilegios.getValue();
+        Privilegio privilegio = tablaPrivilegios.getSelectionModel().getSelectedItem();
+
+        if (rol == null) {
+            mostrarMensaje("Selecciona un rol.");
+            return;
+        }
+
+        if (privilegio == null) {
+            mostrarMensaje("Selecciona un privilegio.");
+            return;
+        }
+
+        if (privilegio.isAsignado()) {
+            mostrarMensaje("Este privilegio ya está asignado.");
+            return;
+        }
+
+        boolean ok = usuarioModel.asignarPrivilegio(
+                rol.getIdRol(),
+                privilegio.getIdPrivilegio()
+        );
+
+        if (ok) {
+            mostrarMensaje("Privilegio asignado correctamente.");
+            cargarPrivilegiosRol();
+        } else {
+            mostrarMensaje("No se pudo asignar el privilegio.");
+        }
+    }
+
+    @FXML
+    private void quitarPrivilegio() {
+        RolItem rol = cbRolPrivilegios.getValue();
+        Privilegio privilegio = tablaPrivilegios.getSelectionModel().getSelectedItem();
+
+        if (rol == null) {
+            mostrarMensaje("Selecciona un rol.");
+            return;
+        }
+
+        if (privilegio == null) {
+            mostrarMensaje("Selecciona un privilegio.");
+            return;
+        }
+
+        if (!privilegio.isAsignado()) {
+            mostrarMensaje("Este privilegio no está asignado.");
+            return;
+        }
+
+        boolean ok = usuarioModel.quitarPrivilegio(
+                rol.getIdRol(),
+                privilegio.getIdPrivilegio()
+        );
+
+        if (ok) {
+            mostrarMensaje("Privilegio quitado correctamente.");
+            cargarPrivilegiosRol();
+        } else {
+            mostrarMensaje("No se pudo quitar el privilegio.");
+        }
+    }
 
     @FXML
     private void limpiarFormulario() {
@@ -247,6 +364,9 @@ public class SeguridadController {
         panelAccesos.setVisible(false);
         panelAccesos.setManaged(false);
 
+        panelPrivilegios.setVisible(false);
+        panelPrivilegios.setManaged(false);
+
         panelCambiarPassword.setVisible(true);
         panelCambiarPassword.setManaged(true);
     }
@@ -259,6 +379,9 @@ public class SeguridadController {
         panelAccesos.setVisible(false);
         panelAccesos.setManaged(false);
 
+        panelPrivilegios.setVisible(false);
+        panelPrivilegios.setManaged(false);
+
         panelUsuarios.setVisible(true);
         panelUsuarios.setManaged(true);
 
@@ -267,7 +390,19 @@ public class SeguridadController {
 
     @FXML
     private void mostrarPrivilegios() {
-        mostrarMensaje("Privilegios en construcción.");
+        panelCambiarPassword.setVisible(false);
+        panelCambiarPassword.setManaged(false);
+
+        panelUsuarios.setVisible(false);
+        panelUsuarios.setManaged(false);
+
+        panelAccesos.setVisible(false);
+        panelAccesos.setManaged(false);
+
+        panelPrivilegios.setVisible(true);
+        panelPrivilegios.setManaged(true);
+
+        cargarRolesPrivilegios();
     }
 
     @FXML
@@ -277,6 +412,9 @@ public class SeguridadController {
 
         panelUsuarios.setVisible(false);
         panelUsuarios.setManaged(false);
+
+        panelPrivilegios.setVisible(false);
+        panelPrivilegios.setManaged(false);
 
         panelAccesos.setVisible(true);
         panelAccesos.setManaged(true);

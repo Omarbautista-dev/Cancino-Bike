@@ -313,4 +313,96 @@ public class UsuarioSeguridadModel {
 
         return lista;
     }
+    public List<Privilegio> listarPrivilegiosPorRol(int idRol) {
+        List<Privilegio> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            p.id_privilegio,
+            p.modulo,
+            p.accion,
+            CASE 
+                WHEN rp.id_rol_privilegio IS NULL THEN 0 
+                ELSE 1 
+            END AS asignado
+        FROM privilegios p
+        LEFT JOIN rol_privilegios rp 
+            ON p.id_privilegio = rp.id_privilegio
+            AND rp.id_rol = ?
+        ORDER BY p.modulo, p.accion
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idRol);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lista.add(new Privilegio(
+                        rs.getInt("id_privilegio"),
+                        rs.getString("modulo"),
+                        rs.getString("accion"),
+                        rs.getInt("asignado") == 1
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    public boolean asignarPrivilegio(int idRol, int idPrivilegio) {
+        String sql = """
+        INSERT INTO rol_privilegios (id_rol, id_privilegio)
+        SELECT ?, ?
+        WHERE NOT EXISTS (
+            SELECT 1 
+            FROM rol_privilegios 
+            WHERE id_rol = ? 
+            AND id_privilegio = ?
+        )
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idRol);
+            ps.setInt(2, idPrivilegio);
+            ps.setInt(3, idRol);
+            ps.setInt(4, idPrivilegio);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean quitarPrivilegio(int idRol, int idPrivilegio) {
+        String sql = """
+        DELETE FROM rol_privilegios
+        WHERE id_rol = ?
+        AND id_privilegio = ?
+    """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idRol);
+            ps.setInt(2, idPrivilegio);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

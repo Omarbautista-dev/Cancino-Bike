@@ -199,6 +199,59 @@
 
             </VBox>
 
+            <VBox fx:id="panelPrivilegios"
+                  spacing="10"
+                  visible="false"
+                  managed="false"
+                  styleClass="password-panel"
+                  VBox.vgrow="ALWAYS">
+
+                <Label text="PRIVILEGIOS POR ROL" styleClass="form-title"/>
+
+                <HBox spacing="8">
+                    <Label text="Rol:" styleClass="form-label"/>
+
+                    <ComboBox fx:id="cbRolPrivilegios"
+                              promptText="Selecciona rol"
+                              prefWidth="220"/>
+
+                    <Button text="Cargar privilegios"
+                            onAction="#cargarPrivilegiosRol"
+                            styleClass="menu-button"/>
+                </HBox>
+
+                <TableView fx:id="tablaPrivilegios"
+                           prefHeight="430"
+                           VBox.vgrow="ALWAYS">
+
+                    <columns>
+                        <TableColumn fx:id="colPrivModulo"
+                                     text="Módulo"
+                                     prefWidth="220"/>
+
+                        <TableColumn fx:id="colPrivAccion"
+                                     text="Acción"
+                                     prefWidth="220"/>
+
+                        <TableColumn fx:id="colPrivAsignado"
+                                     text="Asignado"
+                                     prefWidth="120"/>
+                    </columns>
+
+                </TableView>
+
+                <HBox spacing="8">
+                    <Button text="Asignar privilegio"
+                            onAction="#asignarPrivilegio"
+                            styleClass="menu-button"/>
+
+                    <Button text="Quitar privilegio"
+                            onAction="#quitarPrivilegio"
+                            styleClass="menu-button"/>
+                </HBox>
+
+            </VBox>
+
         </VBox>
 
     </VBox>
