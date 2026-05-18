@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.ReportesController"
+            prefWidth="1100"
+            prefHeight="780"
+            styleClass="root-dashboard">
+
+    <VBox AnchorPane.topAnchor="20"
+          AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10"
+          styleClass="main-box">
+
+        <HBox styleClass="header">
+            <ImageView fx:id="logoImage"
+                       fitWidth="58"
+                       fitHeight="58"
+                       preserveRatio="true"/>
+
+            <VBox styleClass="title-box">
+                <Label text="Refaccionaria" styleClass="title"/>
+                <Label text="Cancino Bike" styleClass="title"/>
+            </VBox>
+        </HBox>
+
+        <HBox styleClass="menu-bar">
+            <Button text="Dashboard" onAction="#abrirDashboard" styleClass="menu-button"/>
+            <Button text="Ventas" onAction="#mostrarReporteVentas" styleClass="menu-button"/>
+            <Button text="Inventario" onAction="#mostrarReporteInventario" styleClass="menu-button"/>
+            <Button text="Utilidad" onAction="#mostrarReporteUtilidad" styleClass="menu-button"/>
+            <Button text="Corte caja" onAction="#generarReporte" styleClass="menu-button"/>
+        </HBox>
+
+        <VBox VBox.vgrow="ALWAYS" styleClass="content">
+
+            <HBox styleClass="module-title-bar">
+                <Label text="REPORTES" styleClass="module-title"/>
+            </HBox>
+
+            <HBox spacing="10" styleClass="reporte-toolbar">
+                <Label text="Fecha:" styleClass="form-label"/>
+                <DatePicker fx:id="dpFecha"/>
+
+                <Button text="Generar reporte"
+                        onAction="#generarReporte"
+                        styleClass="menu-button"/>
+
+                <Button text="Guardar corte"
+                        onAction="#guardarCorteCaja"
+                        styleClass="menu-button"/>
+            </HBox>
+
+            <FlowPane hgap="15"
+                      vgap="15"
+                      styleClass="cards-grid">
+
+                <VBox styleClass="reporte-card">
+                    <Label text="TOTAL VENTAS" styleClass="card-title"/>
+                    <Label fx:id="lblTotalVentas" text="$0.00" styleClass="card-value"/>
+                </VBox>
+
+                <VBox styleClass="reporte-card">
+                    <Label text="VENTAS CONTADO" styleClass="card-title"/>
+                    <Label fx:id="lblTotalContado" text="$0.00" styleClass="card-value"/>
+                </VBox>
+
+                <VBox styleClass="reporte-card">
+                    <Label text="VENTAS CRÉDITO" styleClass="card-title"/>
+                    <Label fx:id="lblTotalCredito" text="$0.00" styleClass="card-value"/>
+                </VBox>
+
+                <VBox styleClass="reporte-card">
+                    <Label text="UTILIDAD ESTIMADA" styleClass="card-title"/>
+                    <Label fx:id="lblUtilidad" text="$0.00" styleClass="card-value"/>
+                </VBox>
+
+                <VBox styleClass="reporte-card">
+                    <Label text="NÚMERO DE VENTAS" styleClass="card-title"/>
+                    <Label fx:id="lblNumeroVentas" text="0" styleClass="card-value"/>
+                </VBox>
+
+                <VBox styleClass="reporte-card">
+                    <Label text="VALOR INVENTARIO" styleClass="card-title"/>
+                    <Label fx:id="lblValorInventario" text="$0.00" styleClass="card-value"/>
+                </VBox>
+
+            </FlowPane>
+
+            <VBox styleClass="reporte-panel">
+                <Label text="Resumen" styleClass="form-title"/>
+
+                <TextArea fx:id="txtResumen"
+                          editable="false"
+                          wrapText="true"
+                          prefHeight="220"/>
+            </VBox>
+
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>
