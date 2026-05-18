@@ -172,6 +172,10 @@ public class ProveedoresController {
 
         if (!validarCampos()) return;
 
+        if (proveedorModel.existeEmpresa(txtEmpresa.getText().trim())) {
+            mostrarMensaje("Ya existe un proveedor con ese nombre de empresa.");
+            return;
+        }
         boolean ok = proveedorModel.insertarProveedor(
                 txtEmpresa.getText().trim(),
                 txtContacto.getText().trim(),
@@ -249,10 +253,11 @@ public class ProveedoresController {
 
         confirmacion.setHeaderText(null);
 
-        confirmacion.setContentText(
-                "¿Eliminar proveedor?"
-        );
 
+        confirmacion.setContentText(
+                "¿Seguro que deseas eliminar este proveedor?\n\n" +
+                        proveedorSeleccionado.getNombreEmpresa()
+        );
         ButtonType respuesta =
                 confirmacion.showAndWait()
                         .orElse(ButtonType.CANCEL);
@@ -293,12 +298,28 @@ public class ProveedoresController {
 
     private boolean validarCampos() {
 
-        if (txtEmpresa.getText().trim().isEmpty()) {
+        String empresa = txtEmpresa.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String email = txtEmail.getText().trim();
+        String rfc = txtRfc.getText().trim();
 
-            mostrarMensaje(
-                    "Ingresa nombre empresa."
-            );
+        if (empresa.isEmpty()) {
+            mostrarMensaje("Ingresa el nombre de la empresa.");
+            return false;
+        }
 
+        if (!telefono.isEmpty() && !telefono.matches("\\d{10}")) {
+            mostrarMensaje("El teléfono debe tener 10 dígitos numéricos.");
+            return false;
+        }
+
+        if (!email.isEmpty() && !email.matches("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$")) {
+            mostrarMensaje("Ingresa un email válido.");
+            return false;
+        }
+
+        if (!rfc.isEmpty() && (rfc.length() < 12 || rfc.length() > 13)) {
+            mostrarMensaje("El RFC debe tener 12 o 13 caracteres.");
             return false;
         }
 

@@ -211,4 +211,30 @@ public class ProveedorModel {
 
         return false;
     }
+
+    public boolean existeEmpresa(String empresa) {
+        String sql = """
+        SELECT COUNT(*) AS total
+        FROM proveedores
+        WHERE nombre_empresa = ?
+        AND estado = 1
+        """;
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, empresa);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total") > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }
